@@ -107,7 +107,7 @@ export default function CoffeeScreen() {
       </View>
       <TouchableOpacity
         style={styles.bottomContainer}
-        onPress={() => router.replace('/(tabs)/porta')}
+        onPress={() => router.replace(`/(tabs)/intro`)}
       >
         <Text style={styles.bottomText}>CONTINUE</Text>
         <AntDesign name="rightcircle" size={30} color={colors.primary} />

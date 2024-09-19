@@ -27,7 +27,7 @@ export default function WelcomeScreen() {
         <View style={styles.secondContainer}>
           <TouchableOpacity
             onPress={() => {
-              router.replace('/(tabs)/coffee');
+              router.replace(`/(tabs)/machine`);
             }}
             style={styles.back}
           >

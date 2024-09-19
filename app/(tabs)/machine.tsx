@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Linking,
   TextInput,
+  Alert,
 } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import { HelloWave } from '@/components/HelloWave';
@@ -16,11 +17,66 @@ import { ThemedView } from '@/components/ThemedView';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
 import { router } from 'expo-router';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import CustomTextInput from '@/components/CustomTextInput';
+
+import * as ImagePicker from 'expo-image-picker';
 
 export default function WelcomeScreen() {
   const [text, onChangeText] = useState('');
+  const [image, setImage] = useState<string | null>(null);  // Define image as string or null
+
+  // Function to open options to either take a photo or choose from the gallery
+  const pickImage = async () => {
+    const choice = await new Promise((resolve) =>
+      Alert.alert(
+        'Select an option',
+        'Would you like to take a photo or select from the gallery?',
+        [
+          { text: 'Cancel', onPress: () => resolve(null), style: 'cancel' },
+          { text: 'Take Photo', onPress: () => resolve('camera') },
+          { text: 'Choose from Gallery', onPress: () => resolve('gallery') },
+        ]
+      )
+    );
+
+    if (choice === 'camera') {
+      let cameraResult = await ImagePicker.launchCameraAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!cameraResult.canceled && cameraResult.assets) {
+        setImage(cameraResult.assets[0].uri);  // Correct way to assign the image URI
+      }
+    } else if (choice === 'gallery') {
+      let galleryResult = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!galleryResult.canceled && galleryResult.assets) {
+        setImage(galleryResult.assets[0].uri);  // Correct way to assign the image URI
+      }
+    }
+  };
+
+  useEffect(() => {
+    (async () => {
+      const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+      const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
+      if (cameraStatus !== 'granted') {
+        alert('Sorry, we need camera permissions to make this work!');
+      }
+    })();
+  }, []);
   return (
     <Footer>
       <View style={styles.container}>
@@ -31,9 +87,7 @@ export default function WelcomeScreen() {
         <View style={styles.secondContainer}>
           <TouchableOpacity
             // title='SIGN IN'
-            onPress={() => {
-              router.replace('/(tabs)/');
-            }}
+            onPress={pickImage}
             style={styles.back}
           >
             <Text style={styles.backText}>TAKE A PHOTO</Text>
@@ -82,7 +136,7 @@ const styles = StyleSheet.create({
     // alignItems: 'center',
   },
   welcome: {
-    fontSize: 50,
+    fontSize: 35,
     fontWeight: 'medium',
     textAlign: 'left',
     // position: 'relative',
@@ -90,7 +144,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
   },
   title: {
-    fontSize: 80,
+    fontSize: 50,
     fontWeight: 'bold',
     textAlign: 'left',
     // position: 'relative',
@@ -117,7 +171,7 @@ const styles = StyleSheet.create({
   },
   backText: {
     color: colors.white,
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: 'bold',
   },
   ORText: {
