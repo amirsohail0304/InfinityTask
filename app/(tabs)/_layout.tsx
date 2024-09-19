@@ -168,6 +168,18 @@ export default function StackLayout() {
           title: 'Porta',
         }}
       />
+      <Stack.Screen
+        name="recipeTimer"
+        options={{
+          title: 'recipeTimer',
+        }}
+      />
+      <Stack.Screen
+        name="recipeVideo"
+        options={{
+          title: 'recipeVideo',
+        }}
+      />
     </Stack>
   );
 }

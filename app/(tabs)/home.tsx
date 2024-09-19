@@ -32,6 +32,7 @@ export default function HomeScreen() {
             // title='SIGN IN'
             onPress={() => {
               router.replace('/(tabs)/welcome');
+              // router.replace('/(tabs)/recipeTimer');
             }}
             style={styles.back}
           >
