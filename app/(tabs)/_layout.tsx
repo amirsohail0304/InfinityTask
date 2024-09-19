@@ -180,6 +180,12 @@ export default function StackLayout() {
           title: 'recipeVideo',
         }}
       />
+      <Stack.Screen
+        name="aboutRecipe"
+        options={{
+          title: 'aboutRecipe',
+        }}
+      />
     </Stack>
   );
 }
