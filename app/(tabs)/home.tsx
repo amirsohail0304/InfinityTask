@@ -32,7 +32,6 @@ export default function HomeScreen() {
             // title='SIGN IN'
             onPress={() => {
               router.replace('/(tabs)/welcome');
-              // router.replace('/(tabs)/recipeTimer');
             }}
             style={styles.back}
           >
@@ -63,8 +62,9 @@ export default function HomeScreen() {
             <Text style={styles.backText}>BUY COFFEE</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            // title='SIGN IN'
-            // onPress={handleSignIn}
+            onPress={() => {
+              router.replace('/(tabs)/aboutRecipe');
+            }}
             style={styles.back}
           >
             <Text style={styles.backText}>ABOUT</Text>
