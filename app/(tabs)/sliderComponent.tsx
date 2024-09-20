@@ -28,9 +28,10 @@ const steps = [
     },
 ];
 
-const CoffeeStepsSlider = () => {
+const CoffeeStepsSlider = (props: any) => {
+    const { currentIndex, setCurrentIndex } = props
     const carouselRef = useRef<any>(null);
-    const [currentIndex, setCurrentIndex] = useState(0);
+    // const [currentIndex, setCurrentIndex] = useState(0);
 
     const _renderItem = ({ item }: { item: any }) => {
         return <SliderCard cardData={item} />;
@@ -46,7 +47,7 @@ const CoffeeStepsSlider = () => {
 
     return (
         <>
-            <View style={{ height: 370, marginTop: 70, backgroundColor: colors.white }}>
+            <View style={{ height: 370, marginTop: 70, }}>
                 <Carousel
                     ref={carouselRef}
                     data={steps}

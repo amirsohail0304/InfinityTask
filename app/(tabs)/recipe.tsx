@@ -22,6 +22,8 @@ export default function RecipeScreen() {
     const [nameValue, setNameValue] = useState<any>();
     const [messageError, setMessageError] = useState<any>();
     const [portaError, setPortaError] = useState<any>("");
+    const [currentIndex, setCurrentIndex] = useState(0);
+
 
     const radioButtons = useMemo(
         () => [
@@ -48,6 +50,7 @@ export default function RecipeScreen() {
                 setNameValue("")
                 setMessageError("")
                 setPortaError("")
+                setCurrentIndex(0)
 
             }
         }, [])
@@ -142,24 +145,28 @@ export default function RecipeScreen() {
                             />
                         </View>
                     </View>
+                    <CoffeeStepsSlider
+                        setCurrentIndex={setCurrentIndex}
+                        currentIndex={currentIndex}
+                    />
                 </>
             }
-            {isPortafilterSize && isPortaValue &&
+            {currentIndex === 2 &&
                 <RecipeChat
                     chatText={"Dont quite get it? Watch this video?"}
                 />}
-            {isPortafilterSize && isPortaValue &&
+            {currentIndex === 2 &&
                 <BtnComponenet
                     onPress={handleVideoScreen}
                     btnText="Now Go"
                 />
             }
-            {isPortafilterSize && isPortaValue &&
+            {currentIndex === 2 &&
                 <RecipeChat
                     chatText={"How Did you go? Your Dose was 18g. Your Yeild was 36g ish. What time did you stop your clock at?"}
                 />
             }
-            {isPortafilterSize && isPortaValue &&
+            {currentIndex === 2 &&
                 <BtnComponenet
                     onPress={handleTimerScreen}
                     btnText="Continue"
