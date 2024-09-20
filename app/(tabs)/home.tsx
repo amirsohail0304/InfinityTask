@@ -62,8 +62,9 @@ export default function HomeScreen() {
             <Text style={styles.backText}>BUY COFFEE</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            // title='SIGN IN'
-            // onPress={handleSignIn}
+            onPress={() => {
+              router.replace('/(tabs)/aboutRecipe');
+            }}
             style={styles.back}
           >
             <Text style={styles.backText}>ABOUT</Text>

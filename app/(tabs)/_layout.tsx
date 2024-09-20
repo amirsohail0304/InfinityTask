@@ -173,6 +173,25 @@ export default function StackLayout() {
         options={{
           title: 'recipe',
         }}
+
+      />
+      <Stack.Screen
+        name="recipeTimer"
+        options={{
+          title: 'recipeTimer',
+        }}
+      />
+      <Stack.Screen
+        name="recipeVideo"
+        options={{
+          title: 'recipeVideo',
+        }}
+      />
+      <Stack.Screen
+        name="aboutRecipe"
+        options={{
+          title: 'aboutRecipe',
+        }}
       />
     </Stack>
   );

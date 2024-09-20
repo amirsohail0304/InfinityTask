@@ -17,7 +17,8 @@
       "bundleIdentifier": "com.averagejoescoffeeexpo.joecoffee",
       "infoPlist": {
         "NSCameraUsageDescription": "This app uses the camera to take photos.",
-        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to pick images."
+        "NSPhotoLibraryUsageDescription": "This app needs access to your photo library to pick images.",
+        "NSMicrophoneUsageDescription": "Allow $(PRODUCT_NAME) to access your microphone"
       }
     },
     "android": {
@@ -30,7 +31,8 @@
       "permissions": [
         "CAMERA",
         "WRITE_EXTERNAL_STORAGE",
-        "READ_EXTERNAL_STORAGE"
+        "READ_EXTERNAL_STORAGE",
+        "RECORD_AUDIO"
       ]
     },
     "web": {
