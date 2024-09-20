@@ -18,7 +18,7 @@ import { router } from 'expo-router';
 
 export default function HomeScreen() {
   return (
-    <Footer>
+    <Footer aspectRatio="small">
       <View style={styles.container}>
         <View>
           <Text style={styles.title}>JOE</Text>
