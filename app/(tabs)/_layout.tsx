@@ -168,6 +168,12 @@ export default function StackLayout() {
           title: 'Porta',
         }}
       />
+      <Stack.Screen
+        name="recipe"
+        options={{
+          title: 'recipe',
+        }}
+      />
     </Stack>
   );
 }
