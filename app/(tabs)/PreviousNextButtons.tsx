@@ -19,13 +19,14 @@ const ArrowPrevNextButtons: React.FC<ArrowPrevNextButtonsProps> = ({
         <View style={styles.arrowBtnsContainer}>
             {/* Back Arrow */}
             <TouchableOpacity onPress={handlePrev} disabled={currentIndex === 0}>
-                <Entypo name="chevron-left" size={30} color={'black'} />
+
+                {/* <Entypo name="chevron-left" size={30} color={'black'} /> */}
             </TouchableOpacity>
 
             {/* Current Index Display */}
-            <Text style={styles.cardCounter}>
+            {/* <Text style={styles.cardCounter}>
                 {`${currentIndex + 1}/${cardData.length}`}
-            </Text>
+            </Text> */}
 
             {/* Forward Arrow */}
             <TouchableOpacity onPress={handleNext} disabled={currentIndex === cardData.length - 1}>

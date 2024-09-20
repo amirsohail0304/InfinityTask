@@ -169,6 +169,13 @@ export default function StackLayout() {
         }}
       />
       <Stack.Screen
+        name="recipe"
+        options={{
+          title: 'recipe',
+        }}
+
+      />
+      <Stack.Screen
         name="recipeTimer"
         options={{
           title: 'recipeTimer',
