@@ -6,12 +6,24 @@ import Footer from '@/components/Footer';
 import { router } from 'expo-router';
 import CustomTextInput from '@/components/CustomTextInput';
 import ImagePickerModal from './modalComponent';
+import ErrorText from '@/components/ErrorComponent';
 
 export default function CoffeeScreen() {
   const [text, onChangeText] = useState('');
   const [image, setImage] = useState<string | null>(null);
   const [modalVisible, setModalVisible] = useState(false);
+  const [messageError, setMessaage] = useState('');
 
+  const handleResult = () => {
+    if (text.trim().length > 0) {
+      setMessaage("")
+      router.navigate('/(tabs)/intro')
+      onChangeText('')
+    }
+    else {
+      setMessaage("machine name field is required")
+    }
+  };
   return (
     <Footer aspectRatio="small">
       <View style={styles.container}>
@@ -38,10 +50,13 @@ export default function CoffeeScreen() {
             value={text}
             onChangeText={onChangeText}
           />
+          <ErrorText
+            error={messageError}
+          />
         </View>
         <TouchableOpacity
           style={styles.bottomContainer}
-          onPress={() => router.replace('/(tabs)/intro')}
+          onPress={handleResult}
         >
           <Text style={styles.bottomText}>CONTINUE</Text>
           <AntDesign name="rightcircle" size={30} color={colors.primary} />
