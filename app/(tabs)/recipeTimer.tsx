@@ -102,7 +102,7 @@ export default function RecipeTimerScreen() {
                     />
                     <TouchableOpacity
                         style={styles.bottomContainer}
-                        onPress={() => router.navigate(`/(tabs)/recipe`)}
+                        onPress={() => router.navigate(`/(tabs)\recipe`)}
                     >
                         <Text style={styles.bottomText}>Repeat Again</Text>
                         <AntDesign name="rightcircle" size={30} color={colors.primary} />
