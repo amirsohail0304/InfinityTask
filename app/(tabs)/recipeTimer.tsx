@@ -11,31 +11,93 @@ import Footer from '@/components/Footer';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import CustomTextInput from '@/components/CustomTextInput';
+import RecipeChat from '@/components/RecipeChat';
+import ErrorText from '@/components/ErrorComponent';
 
 export default function RecipeTimerScreen() {
-    const [timer, setTimer] = useState();
+    const [timer, setTimer] = useState<any>("");
+    const [shotTime, setShotTime] = useState('');
+    const [messageError, setMessaage] = useState('');
+    const [messageShow, setMessageShow] = useState('');
 
+    const handleResult = () => {
+        console.log("shotTime", shotTime)
+        let time
+        const extractedInteger = shotTime.match(/\d+/);
 
+        if (extractedInteger) {
+            time = parseInt(extractedInteger[0], 10);
+            console.log(time);
+        } else {
+            setMessaage("No integer found")
+        }
+        if (time) {
+            if (time >= 25 && time <= 30) {
+                setMessageShow("Thats perfect. you are a gun. you didnt need any help. You are in the 1% if natually gifted baristas ")
+            }
+            else if (time >= 30 && time <= 35) {
+                setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch coarser for your next coffee. It will allow a bit more acidity to be extracted from the coffee and balance the bitterness you might be tasting.")
+            }
+            else if (time >= 20 && time <= 25) {
+                setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch finer for your next coffee. That will extract a bit more sweetness from the coffee and reduce the acidity. Follow the recipe again next time")
+            }
+            else if (time >= 15 && time <= 20) {
+                setMessageShow("")
+            }
+            else if (time >= 35 && time <= 40) {
+                setMessageShow("")
+            }
+            else if (time >= 10 && time <= 15) {
+                setMessageShow("")
+            }
+            else if (time >= 40 && time <= 45) {
+                setMessageShow("")
+            }
+            else if (time < 10) {
+
+            }
+            else if (time > 45) {
+
+            }
+
+            setMessaage("")
+        }
+        else {
+            setMessaage("Time field is required")
+        }
+    };
+    console.log("messageShow", messageShow)
     return (
-        <Footer>
+        <Footer
+            aspectRatio="small"
+        >
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.welcome}>ENTER YOUR</Text>
-                    <Text style={styles.title}>TIME</Text>
+                    <Text style={styles.welcome}>How Did you go? Your Dose was 18g. Your Yeild was 36g ish </Text>
+                    <Text style={styles.title}>What time did you stop your clock at?</Text>
                 </View>
                 <CustomTextInput
                     style={styles.input}
                     placeholder="Enter your time here"
-                    value={timer}
-                // onChangeText={text => setTimer()}
+                    value={shotTime}
+                    keyboardType='number-pad'
+                    onChangeText={text => setShotTime(text)}
+                />
+                <ErrorText
+                    error={messageError}
                 />
             </View>
             <TouchableOpacity
                 style={styles.bottomContainer}
+                onPress={handleResult}
             >
                 <Text style={styles.bottomText}>CONTINUE</Text>
                 <AntDesign name="rightcircle" size={30} color={colors.primary} />
             </TouchableOpacity>
+            {messageShow &&
+                <RecipeChat
+                    chatText={messageShow}
+                />}
         </Footer>
     );
 }
@@ -48,21 +110,21 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
+        marginTop: 60
     },
     container: {
-        gap: 60,
         flex: 1,
         justifyContent: 'center',
         paddingHorizontal: 20,
         backgroundColor: colors.background,
+        marginTop: 100,
     },
     secondContainer: {
-        gap: 20,
         // justifyContent: 'center',
         // alignItems: 'center',
     },
     welcome: {
-        fontSize: 25,
+        fontSize: 18,
         fontWeight: 'medium',
         textAlign: 'left',
         // position: 'relative',
@@ -70,11 +132,11 @@ const styles = StyleSheet.create({
         color: colors.primary,
     },
     title: {
-        fontSize: 25,
+        fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'left',
         // position: 'relative',
-        // marginBottom: 10,
+        marginTop: 10,
         color: colors.primary,
     },
     logoImage: {
@@ -114,11 +176,10 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bottomContainer: {
-        gap: 10,
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
-        marginBottom: 10
+        marginTop: 40
     },
 });

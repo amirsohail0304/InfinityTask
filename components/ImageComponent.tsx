@@ -11,9 +11,10 @@ import { useEffect, useState } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import CustomTextInput from './CustomTextInput';
 import ErrorText from './ErrorComponent';
+import { Picker } from '@react-native-picker/picker';
 
-const RecipeChat = (props: any) => {
-    const { chatText, chatType, setChangeValue, value, error } = props
+const ImageComponent = (props: any) => {
+    const { chatText, chatType, setChangeValue, value, error, selectedValue, setSelectedValue } = props
     const [coffeeInfo, setCoffeeInfo] = useState({ roaster: '', name: '', age: '' });
     const [image, setImage] = useState<string | null>(null);  // Define image as string or null
 
@@ -69,17 +70,64 @@ const RecipeChat = (props: any) => {
         })();
     }, []);
     return (
-        <View style={styles.container}>
-            <View style={styles.secondContainer}>
-                <View>
-                    <Text style={styles.title}>{chatText}</Text>
+        <View style={styles.logoImageView}>
+            <Image
+                source={require('@/assets/images/avatar.png')}
+                style={styles.logoImage}
+            />
+            {chatType === "takePhoto" ?
+                <>
+                    <View style={{ flexDirection: "row", justifyContent: "center", gap: 10, marginTop: 20, }}>
+                        <TouchableOpacity
+                            // title='SIGN IN'
+                            onPress={pickImage}
+                            style={styles.back}
+                        >
+                            <Text style={styles.backText}>TAKE A PHOTO</Text>
+                        </TouchableOpacity>
+                        <View style={{ height: 10, alignItems: "center" }}>
+
+                            <CustomTextInput
+                                style={styles.input}
+                                placeholder="Enter Name here"
+                                value={value}
+                                // onChangeText={onChangeText}
+                                onChangeText={text => setChangeValue(text)}
+                            />
+
+                        </View>
+                    </View>
+                    <ErrorText
+                        error={error}
+                    />
+                </>
+                :
+                <View style={{ width: "60%", height: 30, borderRadius: 10 }}>
+                    <Picker selectedValue={selectedValue} onValueChange={itemValue => setSelectedValue(itemValue)}
+                        dropdownIconColor={colors.primary}
+                        style={{ backgroundColor: "white", marginHorizontal: 20 }}
+                    >
+                        <Picker.Item label="Select an option" value="" color={colors.primary} />
+                        <Picker.Item label="51mm" value="51mm"
+                            color={colors.primary}
+                        />
+                        <Picker.Item label="54mm" value="54mm"
+                            color={colors.primary}
+                        />
+                        <Picker.Item label="58mm" value="58mm"
+                            color={colors.primary}
+                        />
+                    </Picker>
+                    <ErrorText
+                        error={error}
+                    />
                 </View>
-            </View>
+            }
         </View>
     )
 
 }
-export default RecipeChat
+export default ImageComponent
 const styles = StyleSheet.create({
 
     container: {
@@ -112,10 +160,14 @@ const styles = StyleSheet.create({
         borderRadius: 40
     },
     logoImageView: {
-        height: 80,
-        resizeMode: 'contain',
         width: "100%",
-        borderRadius: 40
+        borderRadius: 40,
+        flexDirection: "row",
+        marginTop: 20,
+        justifyContent: "center",
+        gap: 10,
+        marginHorizontal: 15,
+        alignItems: "center"
     },
     input: {
         height: 42,

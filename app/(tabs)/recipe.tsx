@@ -22,9 +22,18 @@ import CustomTextInput from '@/components/CustomTextInput';
 import RadioGroup from 'react-native-radio-buttons-group';
 import { Picker } from '@react-native-picker/picker';
 import RecipeChat from '@/components/RecipeChat';
+import BtnComponenet from '@/components/BtnComponenet';
+import ErrorText from '@/components/ErrorComponent';
+import { styles } from '@/components/navigation/recipeSTyle';
+import ImageComponent from '@/components/ImageComponent';
 
 export default function RecipeScreen() {
-    const [portafilterSize, setPortafilterSize] = useState('');
+    const [isPortafilterSize, setIsPortafilterSize] = useState(false);
+    const [selectedValue, setSelectedValue] = useState<any>("");
+    const [isPortaValue, setIsPortaValue] = useState<any>(false);
+    const [nameValue, setNameValue] = useState<any>();
+    const [messageError, setMessageError] = useState<any>();
+    const [portaError, setPortaError] = useState<any>("");
 
     const radioButtons = useMemo(
         () => [
@@ -41,29 +50,114 @@ export default function RecipeScreen() {
         ],
         []
     );
+    const handlePortaSize = () => {
+        if (nameValue?.trim()?.length > 0) {
+            setIsPortafilterSize(true)
+            setNameValue("")
+            setMessageError("")
+        }
+        else {
+            setMessageError("Name field is required")
+        }
+    }
+    const handlePortaValue = () => {
+        if (selectedValue) {
+            setIsPortaValue(true)
+            setPortaError("")
+        }
+        else {
+            setPortaError("please Select value")
+        }
+    }
+    const handleTimerScreen = () => {
+        router.navigate(`/(tabs)/recipeTimer`)
+    }
+    const handleVideoScreen = () => {
+        router.navigate(`/(tabs)/recipeVideo`)
+    }
     const renderItem = ({ item, index }: any) => (
         <>
+            <View style={{ marginTop: 30 }}>
+                <RecipeChat
+                    chatText={"Okay so I need to know what coffee you are using? You can type below or take a photo and upload the bag."}
+                />
+                <ImageComponent
+                    setChangeValue={setNameValue}
+                    value={nameValue}
+                    error={messageError}
+                    chatType="takePhoto"
+                />
+            </View>
+            <BtnComponenet
+                onPress={handlePortaSize}
+                btnText="Continue"
+            />
+            {isPortafilterSize &&
+                <>
+                    <RecipeChat
+                        chatText={"Okay great. Firstly what tise portafilter does your machine have ?"}
+                    />
+                    <ImageComponent
+                        error={portaError}
+                        selectedValue={selectedValue}
+                        setSelectedValue={setSelectedValue}
+                    />
+
+                    <BtnComponenet
+                        onPress={handlePortaValue}
+                        btnText="Continue"
+                    />
+
+                </>
+            }
+            {isPortaValue &&
+                <>
+                    <RecipeChat
+                        chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time "}
+                    />
+                    <View style={styles.container}>
+                        <View style={styles.secondContainer}>
+                            <Text style={styles.title}>
+                                Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.
+                                {"\n"}{"\n"}
+                                There are 3 variables you need to remember when making coffee:
+                                {"\n"}
+                                <Text style={styles.bold}>1. DOSE</Text> - the amount of ground coffee that goes IN to the basket (18g on your Machine)
+                                {"\n"}{"\n"}
+                                <Text style={styles.bold}>2. YIELD</Text> - the amount of espresso you want in your cup.
+                                {"\n"}{"\n"}
+                                <Text style={styles.bold}>3. TIME</Text> - the time it takes to achieve the desired yield. (25-30 Seconds). We adjust the grind to get the time into this window. The first 2 variables are constant. They always stay the same. Variable 3 is what we adjust.
+                                {"\n"}{"\n"}
+                                BORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence 18g to 36g.
+                                {"\n"}{"\n"}
+                                Confused? Great, me too after that. Let's make some coffee and it will start to make sense.
+                            </Text>
+                        </View>
+                        <View style={styles.logoImageView}>
+                            <Image
+                                source={require('@/assets/images/avatar.png')}
+                                style={styles.logoImage}
+                            />
+                        </View>
+                    </View>
+                </>
+            }
             <RecipeChat
-                chatText={"Okay so I need to know what coffee you are using? You can type below or take a photo and upload the bag."}
+                chatText={"Dont quite get it? Watch this video?"}
+            />
+            <BtnComponenet
+                onPress={handleVideoScreen}
+                btnText="Now Go"
+            />
+            <RecipeChat
+                chatText={"How Did you go? Your Dose was 18g. Your Yeild was 36g ish. What time did you stop your clock at?"}
+            />
+            <BtnComponenet
+                onPress={handleTimerScreen}
+                btnText="Continue"
             />
         </>
-        // <View style={styles.container}>
-        //     <View style={styles.secondContainer}>
-        //         <View>
-        //             <Text style={styles.title}>
-        //                 
-        //             </Text>
-        //         </View>
-        //     </View>
-        //     <View style={styles.logoImageView}>
-        //         <Image
-        //             source={require('@/assets/images/avatar.png')}
-        //             style={styles.logoImage}
-        //         />
-        //     </View>
-        // </View>
     )
-    const [selectedId, setSelectedId] = useState<string | undefined>();
     return (
         <Footer aspectRatio="small">
             <FlatList
@@ -71,100 +165,8 @@ export default function RecipeScreen() {
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
             />
-            <TouchableOpacity
-                style={styles.bottomContainer}
-                onPress={() => router.replace('/(tabs)/')}
-            >
-                <Text style={styles.bottomText}>YES</Text>
-                <AntDesign name="rightcircle" size={30} color={colors.primary} />
-            </TouchableOpacity>
         </Footer>
     );
 }
 
-const styles = StyleSheet.create({
-    input: {
-        height: 50,
-        borderColor: colors.white,
-        backgroundColor: colors.white,
-        borderWidth: 1,
-        borderRadius: 5,
-        paddingHorizontal: 10,
-    },
-    container: {
-        gap: 10,
-        flex: 1,
-        // marginVertical: 30,
-        paddingHorizontal: 20,
-        backgroundColor: colors.background,
-        paddingTop: 40
-    },
-    secondContainer: {
-        gap: 10,
-        backgroundColor: colors.white,
-        borderRadius: 10,
-        padding: 10,
-        // justifyContent: 'center',
-        // alignItems: 'center',
-    },
-    welcome: {
-        fontSize: 25,
-        fontWeight: 'bold',
-        textAlign: 'left',
-        // position: 'relative',
-        // marginBottom: 10,
-        color: colors.primary,
-    },
-    title: {
-        fontSize: 13,
-        // fontWeight: 'bold',
-        textAlign: 'left',
-        // position: 'relative',
-        // marginBottom: 10,
-        color: colors.primary,
-    },
-    logoImage: {
-        marginTop: 20,
-        height: 100,
 
-        resizeMode: 'contain',
-        alignSelf: 'center',
-    },
-    logoImageView: {
-        height: 120,
-        resizeMode: 'contain',
-        width: 100,
-        borderRadius: 50
-    },
-    back: {
-        alignItems: 'center',
-        backgroundColor: colors.primary,
-        borderRadius: 10,
-        padding: 10,
-    },
-    backText: {
-        color: colors.white,
-        fontSize: 25,
-        fontWeight: 'bold',
-    },
-    ORText: {
-        alignSelf: 'center',
-
-        color: colors.primary,
-        fontSize: 25,
-        fontWeight: 'bold',
-    },
-    bottomText: {
-        // alignSelf: 'center',
-        color: colors.primary,
-        fontSize: 22,
-        fontWeight: 'bold',
-    },
-    bottomContainer: {
-        gap: 10,
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-    },
-});
