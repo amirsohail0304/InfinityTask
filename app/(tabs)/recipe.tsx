@@ -26,6 +26,7 @@ import BtnComponenet from '@/components/BtnComponenet';
 import ErrorText from '@/components/ErrorComponent';
 import { styles } from '@/components/navigation/recipeSTyle';
 import ImageComponent from '@/components/ImageComponent';
+import CoffeeStepsSlider from './sliderComponent';
 
 export default function RecipeScreen() {
     const [isPortafilterSize, setIsPortafilterSize] = useState(false);

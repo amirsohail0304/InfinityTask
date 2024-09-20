@@ -3,6 +3,7 @@ import { View, Dimensions } from 'react-native';
 import Carousel from 'react-native-reanimated-carousel';
 import ArrowPrevNextButtons from './PreviousNextButtons';
 import SliderCard from './sliderCard';
+import colors from '@/components/colors';
 
 const { width } = Dimensions.get('window');
 
@@ -45,13 +46,14 @@ const CoffeeStepsSlider = () => {
 
     return (
         <>
-            <View style={{ flex: 3, marginTop: 70, backgroundColor: "white" }}>
+            <View style={{ height: 370, marginTop: 70, backgroundColor: colors.white }}>
                 <Carousel
                     ref={carouselRef}
                     data={steps}
                     renderItem={_renderItem}
                     loop={false}
                     width={width}
+                    height={370}
                     autoPlay={false}
                     enabled={false}
                     pagingEnabled={false}

@@ -1,3 +1,4 @@
+import colors from '@/components/colors';
 import React from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 
@@ -23,8 +24,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 20,
         marginHorizontal: 10,
-        marginBottom: 20,
         shadowColor: '#000',
+        height: 360,
         shadowOffset: {
             width: 0,
             height: 4,
@@ -32,18 +33,16 @@ const styles = StyleSheet.create({
         shadowOpacity: 0.3,
         shadowRadius: 4,
         elevation: 5,
-        borderLeftWidth: 5,
-        borderLeftColor: '#6200ee',
     },
     title: {
         fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 10,
-        color: '#6200ee',
+        color: colors.primary,
     },
     description: {
-        fontSize: 16,
-        color: '#333',
+        fontSize: 14,
+        color: colors.primary,
         lineHeight: 22,
     },
 });
