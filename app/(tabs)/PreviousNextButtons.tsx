@@ -19,10 +19,10 @@ const ArrowPrevNextButtons: React.FC<ArrowPrevNextButtonsProps> = ({
 }) => {
     return (
         <View style={styles.arrowBtnsContainer}>
-            <BtnComponenet
+            {/* <BtnComponenet
                 onPress={handlePrev}
                 btnText="Previous"
-            />
+            /> */}
 
             <BtnComponenet
                 onPress={handleNext}
@@ -34,9 +34,8 @@ const ArrowPrevNextButtons: React.FC<ArrowPrevNextButtonsProps> = ({
 
 const styles = StyleSheet.create({
     arrowBtnsContainer: {
-        flexDirection: 'row',
-        justifyContent: 'space-evenly',
-        backgroundColor: colors.white
+        // flexDirection: 'row',
+        // justifyContent: 'space-evenly',
         // margin:2,
     },
     cardCounter: {
