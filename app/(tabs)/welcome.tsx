@@ -15,27 +15,29 @@ import { ThemedView } from '@/components/ThemedView';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
 import { router } from 'expo-router';
+import CoffeeStepsSlider from './sliderComponent';
 
 export default function WelcomeScreen() {
   return (
-    <Footer>
-      <View style={styles.container}>
-        <View>
-          <Text style={styles.welcome}>WELCOME TO</Text>
-          <Text style={styles.title}>JOE</Text>
-        </View>
-        <View style={styles.secondContainer}>
-          <TouchableOpacity
-            onPress={() => {
-              router.replace(`/(tabs)/machine`);
-            }}
-            style={styles.back}
-          >
-            <Text style={styles.backText}>GET STARTED</Text>
-          </TouchableOpacity>
-        </View>
-      </View>
-    </Footer>
+    <CoffeeStepsSlider />
+    // <Footer>
+    //   <View style={styles.container}>
+    //     <View>
+    //       <Text style={styles.welcome}>WELCOME TO</Text>
+    //       <Text style={styles.title}>JOE</Text>
+    //     </View>
+    //     <View style={styles.secondContainer}>
+    //       <TouchableOpacity
+    //         onPress={() => {
+    //           router.replace(`/(tabs)/machine`);
+    //         }}
+    //         style={styles.back}
+    //       >
+    //         <Text style={styles.backText}>GET STARTED</Text>
+    //       </TouchableOpacity>
+    //     </View>
+    //   </View>
+    // </Footer>
   );
 }
 

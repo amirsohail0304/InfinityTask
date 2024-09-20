@@ -90,7 +90,7 @@ export default function IntroScreen() {
       </View>
       <TouchableOpacity
         style={styles.bottomContainer}
-        onPress={() => router.replace('/(tabs)/recipe')}
+        onPress={() => router.replace('/(tabs)\recipe')}
       >
         <Text style={styles.bottomText}>YES</Text>
         <AntDesign name="rightcircle" size={30} color={colors.primary} />
@@ -145,6 +145,6 @@ const styles = StyleSheet.create({
     justifyContent: 'flex-end',
     paddingHorizontal: 20,
     top: 30,
-    zIndex: 1
+    zIndex: 2
   },
 });
