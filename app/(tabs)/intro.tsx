@@ -144,6 +144,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingHorizontal: 20,
-    top: 30
+    top: 30,
+    zIndex: 2
   },
 });
