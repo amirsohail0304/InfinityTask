@@ -1,26 +1,13 @@
 import {
     Image,
-    StyleSheet,
-    Platform,
     View,
     Text,
-    TouchableOpacity,
-    Linking,
-    TextInput,
     FlatList,
 } from 'react-native';
-import AntDesign from '@expo/vector-icons/AntDesign';
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
-import { router } from 'expo-router';
-import { useMemo, useState } from 'react';
-import CustomTextInput from '@/components/CustomTextInput';
-import RadioGroup from 'react-native-radio-buttons-group';
-import { Picker } from '@react-native-picker/picker';
+import { router, useFocusEffect, } from 'expo-router';
+import { useCallback, useMemo, useState } from 'react';
 import RecipeChat from '@/components/RecipeChat';
 import BtnComponenet from '@/components/BtnComponenet';
 import ErrorText from '@/components/ErrorComponent';
@@ -49,6 +36,20 @@ export default function RecipeScreen() {
             },
         ],
         []
+    );
+    useFocusEffect(
+        useCallback(() => {
+
+            return () => {
+                setIsPortafilterSize(false)
+                setSelectedValue("")
+                setIsPortaValue(false)
+                setNameValue("")
+                setMessageError("")
+                setPortaError("")
+
+            }
+        }, [])
     );
     const handlePortaSize = () => {
         if (nameValue?.trim()?.length > 0) {
@@ -142,20 +143,27 @@ export default function RecipeScreen() {
                     </View>
                 </>
             }
-            <RecipeChat
-                chatText={"Dont quite get it? Watch this video?"}
-            />
-            <BtnComponenet
-                onPress={handleVideoScreen}
-                btnText="Now Go"
-            />
-            <RecipeChat
-                chatText={"How Did you go? Your Dose was 18g. Your Yeild was 36g ish. What time did you stop your clock at?"}
-            />
-            <BtnComponenet
-                onPress={handleTimerScreen}
-                btnText="Continue"
-            />
+            {isPortafilterSize && isPortaValue &&
+                <RecipeChat
+                    chatText={"Dont quite get it? Watch this video?"}
+                />}
+            {isPortafilterSize && isPortaValue &&
+                <BtnComponenet
+                    onPress={handleVideoScreen}
+                    btnText="Now Go"
+                />
+            }
+            {isPortafilterSize && isPortaValue &&
+                <RecipeChat
+                    chatText={"How Did you go? Your Dose was 18g. Your Yeild was 36g ish. What time did you stop your clock at?"}
+                />
+            }
+            {isPortafilterSize && isPortaValue &&
+                <BtnComponenet
+                    onPress={handleTimerScreen}
+                    btnText="Continue"
+                />
+            }
         </>
     )
     return (

@@ -63,7 +63,7 @@ export default function HomeScreen() {
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              router.replace('/(tabs)/aboutRecipe');
+              router.navigate('/(tabs)/aboutRecipe');
             }}
             style={styles.back}
           >

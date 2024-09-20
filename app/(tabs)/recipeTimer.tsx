@@ -21,7 +21,6 @@ export default function RecipeTimerScreen() {
     const [messageShow, setMessageShow] = useState('');
 
     const handleResult = () => {
-        console.log("shotTime", shotTime)
         let time
         const extractedInteger = shotTime.match(/\d+/);
 
@@ -66,15 +65,13 @@ export default function RecipeTimerScreen() {
             setMessaage("Time field is required")
         }
     };
-    console.log("messageShow", messageShow)
     return (
         <Footer
             aspectRatio="small"
         >
             <View style={styles.container}>
                 <View>
-                    <Text style={styles.welcome}>How Did you go? Your Dose was 18g. Your Yeild was 36g ish </Text>
-                    <Text style={styles.title}>What time did you stop your clock at?</Text>
+                    <Text style={styles.title}>Enter your Time</Text>
                 </View>
                 <CustomTextInput
                     style={styles.input}
@@ -98,6 +95,21 @@ export default function RecipeTimerScreen() {
                 <RecipeChat
                     chatText={messageShow}
                 />}
+            {messageShow &&
+                <>
+                    <RecipeChat
+                        chatText={"Now, can you go through these steps again?"}
+                    />
+                    <TouchableOpacity
+                        style={styles.bottomContainer}
+                        onPress={() => router.navigate(`/(tabs)/recipe`)}
+                    >
+                        <Text style={styles.bottomText}>Repeat Again</Text>
+                        <AntDesign name="rightcircle" size={30} color={colors.primary} />
+                    </TouchableOpacity>
+                </>
+            }
+
         </Footer>
     );
 }
@@ -180,6 +192,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
         paddingHorizontal: 20,
-        marginTop: 40
+        marginTop: 40,
+        gap: 10
     },
 });
