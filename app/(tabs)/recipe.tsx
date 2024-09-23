@@ -4,16 +4,15 @@ import {
     Text,
     FlatList,
 } from 'react-native';
-import colors from '@/components/colors';
 import Footer from '@/components/Footer';
 import { router, useFocusEffect, } from 'expo-router';
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo, useRef, useState } from 'react';
 import RecipeChat from '@/components/RecipeChat';
 import BtnComponenet from '@/components/BtnComponenet';
-import ErrorText from '@/components/ErrorComponent';
 import { styles } from '@/components/navigation/recipeSTyle';
 import ImageComponent from '@/components/ImageComponent';
 import CoffeeStepsSlider from './sliderComponent';
+import GoBackButton from './backButton';
 
 export default function RecipeScreen() {
     const [isPortafilterSize, setIsPortafilterSize] = useState(false);
@@ -23,12 +22,12 @@ export default function RecipeScreen() {
     const [messageError, setMessageError] = useState<any>();
     const [portaError, setPortaError] = useState<any>("");
     const [currentIndex, setCurrentIndex] = useState(0);
-
+    const flatListRef = useRef<FlatList>(null);
 
     const radioButtons = useMemo(
         () => [
             {
-                id: '1', // acts as primary key, should be unique and non-empty string
+                id: '1',
                 label: 'Option 1',
                 value: 'option1',
             },
@@ -82,7 +81,8 @@ export default function RecipeScreen() {
     }
     const renderItem = ({ item, index }: any) => (
         <>
-            <View style={{ marginTop: 30 }}>
+            <GoBackButton />
+            <View style={{ marginTop: 90 }}>
                 <RecipeChat
                     chatText={"Okay so I need to know what coffee you are using? You can type below or take a photo and upload the bag."}
                 />
@@ -100,7 +100,7 @@ export default function RecipeScreen() {
             {isPortafilterSize &&
                 <>
                     <RecipeChat
-                        chatText={"Okay great. Firstly what tise portafilter does your machine have ?"}
+                        chatText={"Okay great. Firstly what tise portafilter does your machine have?"}
                     />
                     <ImageComponent
                         error={portaError}
@@ -118,9 +118,9 @@ export default function RecipeScreen() {
             {isPortaValue &&
                 <>
                     <RecipeChat
-                        chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time "}
+                        chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time"}
                     />
-                    <View style={styles.container}>
+                    <View>
                         <View style={styles.secondContainer}>
                             <Text style={styles.title}>
                                 Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.
@@ -145,10 +145,12 @@ export default function RecipeScreen() {
                             />
                         </View>
                     </View>
-                    <CoffeeStepsSlider
-                        setCurrentIndex={setCurrentIndex}
-                        currentIndex={currentIndex}
-                    />
+                    <View style={{ marginTop: -20 }}>
+                        <CoffeeStepsSlider
+                            setCurrentIndex={setCurrentIndex}
+                            currentIndex={currentIndex}
+                        />
+                    </View>
                 </>
             }
             {currentIndex === 2 &&
@@ -172,6 +174,7 @@ export default function RecipeScreen() {
                     btnText="Continue"
                 />
             }
+            <View style={{ height: 50 }} />
         </>
     )
     return (

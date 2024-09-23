@@ -1,29 +1,23 @@
 import {
   Image,
   StyleSheet,
-  Platform,
   View,
   Text,
   TouchableOpacity,
-  Linking,
-  TextInput,
   ScrollView,
 } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
 import { router } from 'expo-router';
 import { useState } from 'react';
-import CustomTextInput from '@/components/CustomTextInput';
+import GoBackButton from './backButton';
 
 export default function IntroScreen() {
   const [text, onChangeText] = useState('');
   return (
     <Footer aspectRatio="small">
+      <GoBackButton />
       <View style={styles.container}>
         <View>
           <Image
@@ -88,13 +82,15 @@ export default function IntroScreen() {
           </ScrollView>
         </View>
       </View>
-      <TouchableOpacity
-        style={styles.bottomContainer}
-        onPress={() => router.replace('/(tabs)/recipe')}
-      >
-        <Text style={styles.bottomText}>YES</Text>
-        <AntDesign name="rightcircle" size={30} color={colors.primary} />
-      </TouchableOpacity>
+      <View style={styles.bottomContainer}>
+        <TouchableOpacity
+          style={styles.bottomContainer}
+          onPress={() => router.navigate('/(tabs)/recipe')}
+        >
+          <Text style={styles.bottomText}>YES</Text>
+          <AntDesign name="rightcircle" size={30} color={colors.primary} />
+        </TouchableOpacity>
+      </View>
     </Footer>
   );
 }
@@ -111,7 +107,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     padding: 10,
     justifyContent: 'center',
-    height: "80%",
+    height: "78%",
   },
   welcome: {
     fontSize: 25,
@@ -144,7 +140,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'flex-end',
     paddingHorizontal: 20,
-    top: 30,
+    top: 15,
     zIndex: 2
   },
 });

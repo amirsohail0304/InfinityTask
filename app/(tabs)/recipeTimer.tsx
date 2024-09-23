@@ -1,6 +1,5 @@
 import {
     StyleSheet,
-    Platform,
     View,
     Text,
     TouchableOpacity,
@@ -12,7 +11,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import CustomTextInput from '@/components/CustomTextInput';
 import RecipeChat from '@/components/RecipeChat';
-import ErrorText from '@/components/ErrorComponent';
+import GoBackButton from './backButton';
 
 export default function RecipeTimerScreen() {
     const [timer, setTimer] = useState<any>("");
@@ -38,7 +37,7 @@ export default function RecipeTimerScreen() {
                 setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch coarser for your next coffee. It will allow a bit more acidity to be extracted from the coffee and balance the bitterness you might be tasting.")
             }
             else if (time >= 20 && time <= 25) {
-                setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch finer for your next coffee. That will extract a bit more sweetness from the coffee and reduce the acidity. Follow the recipe again next time")
+                setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch finer for your next coffee. That will extract a bit more sweetness from the coffee and reduce the acidity. Follow the recipe again next time.")
             }
             else if (time >= 15 && time <= 20) {
                 setMessageShow("")
@@ -66,50 +65,51 @@ export default function RecipeTimerScreen() {
         }
     };
     return (
-        <Footer
-            aspectRatio="small"
-        >
+        <Footer aspectRatio="small">
+            {!messageShow &&
+                <GoBackButton />
+            }
             <View style={styles.container}>
                 <View>
                     <Text style={styles.title}>Enter your Time</Text>
                 </View>
                 <CustomTextInput
-                    style={styles.input}
+                    style={[styles.input, messageError ? styles.errorBorder : null]}
                     placeholder="Enter your time here"
                     value={shotTime}
                     keyboardType='number-pad'
                     onChangeText={text => setShotTime(text)}
                 />
-                <ErrorText
-                    error={messageError}
-                />
-            </View>
-            <TouchableOpacity
-                style={styles.bottomContainer}
-                onPress={handleResult}
-            >
-                <Text style={styles.bottomText}>CONTINUE</Text>
-                <AntDesign name="rightcircle" size={30} color={colors.primary} />
-            </TouchableOpacity>
-            {messageShow &&
-                <RecipeChat
-                    chatText={messageShow}
-                />}
-            {messageShow &&
-                <>
-                    <RecipeChat
-                        chatText={"Now, can you go through these steps again?"}
-                    />
+                <View style={styles.bottomContainer}>
                     <TouchableOpacity
                         style={styles.bottomContainer}
-                        onPress={() => router.navigate(`/(tabs)\recipe`)}
+                        onPress={handleResult}
                     >
-                        <Text style={styles.bottomText}>Repeat Again</Text>
+                        <Text style={styles.bottomText}>CONTINUE</Text>
                         <AntDesign name="rightcircle" size={30} color={colors.primary} />
                     </TouchableOpacity>
-                </>
-            }
-
+                </View>
+                {messageShow &&
+                    <RecipeChat
+                        chatText={messageShow}
+                    />}
+                {messageShow &&
+                    <>
+                        <RecipeChat
+                            chatText={"Now, can you go through these steps again?"}
+                        />
+                        <View style={styles.bottomContainer}>
+                            <TouchableOpacity
+                                style={styles.bottomContainer}
+                                onPress={() => router.navigate(`/(tabs)/recipe`)}
+                            >
+                                <Text style={styles.bottomText}>Repeat Again</Text>
+                                <AntDesign name="rightcircle" size={30} color={colors.primary} />
+                            </TouchableOpacity>
+                        </View>
+                    </>
+                }
+            </View>
         </Footer>
     );
 }
@@ -122,46 +122,37 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
-        marginTop: 60
+        marginTop: 20
+    },
+    errorBorder: {
+        borderColor: colors.primary
     },
     container: {
         flex: 1,
-        justifyContent: 'center',
         paddingHorizontal: 20,
         backgroundColor: colors.background,
         marginTop: 100,
-    },
-    secondContainer: {
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
     welcome: {
         fontSize: 18,
         fontWeight: 'medium',
         textAlign: 'left',
-        // position: 'relative',
-        // marginBottom: 10,
         color: colors.primary,
     },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
         textAlign: 'left',
-        // position: 'relative',
         marginTop: 10,
         color: colors.primary,
     },
     logoImage: {
-        // width: 50, // Adjust width as needed
-        height: 50, // Adjust height as needed
+        height: 50,
         width: '100%',
-        // position: 'absolute',
         left: '20%',
-
-        resizeMode: 'contain', // Ensures the image scales correctly
-        alignSelf: 'center', // Centers the image horizontally
+        resizeMode: 'contain',
+        alignSelf: 'center',
         marginBottom: 20,
-        // marginVertical: 20, // Adds space above and below the logo
     },
     back: {
         alignItems: 'center',
@@ -182,7 +173,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bottomText: {
-        // alignSelf: 'center',
         color: colors.primary,
         fontSize: 22,
         fontWeight: 'bold',
@@ -191,8 +181,8 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        paddingHorizontal: 20,
-        marginTop: 40,
+        paddingHorizontal: 10,
+        marginTop: 10,
         gap: 10
     },
 });

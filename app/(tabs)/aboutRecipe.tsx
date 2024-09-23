@@ -2,10 +2,12 @@ import React from 'react';
 import { ScrollView, View, Text, StyleSheet, Image } from 'react-native';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
+import GoBackButton from './backButton';
 
 export default function AboutScreen() {
     return (
         <Footer aspectRatio="small">
+            <GoBackButton />
             <ScrollView style={styles.container}>
                 <Image
                     source={require('@/assets/images/average-joe.png')}
