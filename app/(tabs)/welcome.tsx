@@ -1,24 +1,18 @@
 import {
-  Image,
   StyleSheet,
-  Platform,
   View,
   Text,
   TouchableOpacity,
-  Linking,
 } from 'react-native';
-
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
 import { router } from 'expo-router';
+import GoBackButton from './backButton';
 
 export default function WelcomeScreen() {
   return (
-    <Footer>
+    <Footer aspectRatio="small">
+      <GoBackButton />
       <View style={styles.container}>
         <View>
           <Text style={styles.welcome}>WELCOME TO</Text>
@@ -27,7 +21,7 @@ export default function WelcomeScreen() {
         <View style={styles.secondContainer}>
           <TouchableOpacity
             onPress={() => {
-              router.replace(`/(tabs)/machine`);
+              router.navigate(`/(tabs)/machine`);
             }}
             style={styles.back}
           >
@@ -38,43 +32,28 @@ export default function WelcomeScreen() {
     </Footer>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
-    gap: 60,
+    // gap: 60,
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
     backgroundColor: colors.background,
   },
-  secondContainer: {},
+  secondContainer: {
+    marginTop: 20
+  },
   welcome: {
     fontSize: 50,
     fontWeight: 'medium',
     textAlign: 'left',
-    // position: 'relative',
-    // marginBottom: 10,
     color: colors.primary,
   },
   title: {
     fontSize: 80,
     fontWeight: 'bold',
     textAlign: 'left',
-    // position: 'relative',
-    // marginBottom: 10,
     color: colors.primary,
-  },
-  logoImage: {
-    // width: 50, // Adjust width as needed
-    height: 50, // Adjust height as needed
-    width: '100%',
-    // position: 'absolute',
-    left: '20%',
-
-    resizeMode: 'contain', // Ensures the image scales correctly
-    alignSelf: 'center', // Centers the image horizontally
-    marginBottom: 20,
-    // marginVertical: 20, // Adds space above and below the logo
   },
   back: {
     alignItems: 'center',

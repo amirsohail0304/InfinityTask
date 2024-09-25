@@ -6,7 +6,7 @@ import Footer from '@/components/Footer';
 import { router } from 'expo-router';
 import CustomTextInput from '@/components/CustomTextInput';
 import ImagePickerModal from './modalComponent';
-import ErrorText from '@/components/ErrorComponent';
+import GoBackButton from './backButton';
 
 export default function CoffeeScreen() {
   const [text, onChangeText] = useState('');
@@ -26,16 +26,17 @@ export default function CoffeeScreen() {
   };
   return (
     <Footer aspectRatio="small">
+      <ImagePickerModal
+        visible={modalVisible}
+        onClose={() => setModalVisible(false)}
+        onImagePicked={(uri) => setImage(uri)}
+      />
+      <GoBackButton />
       <View style={styles.container}>
         <View>
           <Text style={styles.welcome}>ENTER YOUR</Text>
           <Text style={styles.title}>COFFEE</Text>
         </View>
-        <ImagePickerModal
-          visible={modalVisible}
-          onClose={() => setModalVisible(false)}
-          onImagePicked={(uri) => setImage(uri)}
-        />
         <View style={styles.secondContainer}>
           <TouchableOpacity
             onPress={() => setModalVisible(true)}
@@ -45,22 +46,21 @@ export default function CoffeeScreen() {
           </TouchableOpacity>
           <Text style={styles.ORText}>OR</Text>
           <CustomTextInput
-            style={styles.input}
+            style={[styles.input, messageError ? styles.errorBorder : null]}
             placeholder="Enter Name here"
             value={text}
             onChangeText={onChangeText}
           />
-          <ErrorText
-            error={messageError}
-          />
         </View>
-        <TouchableOpacity
-          style={styles.bottomContainer}
-          onPress={handleResult}
-        >
-          <Text style={styles.bottomText}>CONTINUE</Text>
-          <AntDesign name="rightcircle" size={30} color={colors.primary} />
-        </TouchableOpacity>
+        <View style={styles.bottomContainer}>
+          <TouchableOpacity
+            style={styles.bottomContainer}
+            onPress={handleResult}
+          >
+            <Text style={styles.bottomText}>CONTINUE</Text>
+            <AntDesign name="rightcircle" size={30} color={colors.primary} />
+          </TouchableOpacity>
+        </View>
       </View>
     </Footer>
   );
@@ -75,15 +75,16 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
   },
+  errorBorder: {
+    borderColor: colors.primary
+  },
   container: {
-    gap: 60,
     flex: 1,
     justifyContent: 'center',
     paddingHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {
-    gap: 20,
   },
   welcome: {
     fontSize: 35,
@@ -102,6 +103,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.primary,
     borderRadius: 10,
     padding: 10,
+    marginTop: 20
   },
   backText: {
     color: colors.white,
@@ -113,6 +115,7 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 25,
     fontWeight: 'bold',
+    paddingVertical: 20
   },
   bottomText: {
     color: colors.primary,
@@ -124,6 +127,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'flex-end',
-    paddingHorizontal: 20,
+    marginTop: 20
   },
 });

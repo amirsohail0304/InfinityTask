@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 import colors from "../colors";
 
 export const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        // paddingHorizontal: 20,
+        backgroundColor: colors.background,
+        marginTop: 20,
+    },
     input: {
         height: 50,
         borderColor: colors.white,
@@ -10,55 +16,51 @@ export const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
     },
+    errorBorder: {
+        borderColor: colors.primary
+    },
     bold: {
         fontWeight: 'bold',
     },
-    container: {
-        gap: 10,
-        flex: 1,
-        // marginVertical: 30,
-        paddingHorizontal: 20,
-        backgroundColor: colors.background,
-        paddingTop: 40
-    },
     secondContainer: {
-        gap: 10,
         backgroundColor: colors.white,
         borderRadius: 10,
         padding: 10,
-        width: "85%",
+        marginTop: 20,
+        marginHorizontal: 10,
+        width: "75%",
         alignSelf: "flex-end"
-        // justifyContent: 'center',
-        // alignItems: 'center',
     },
     welcome: {
         fontSize: 25,
         fontWeight: 'bold',
         textAlign: 'left',
-        // position: 'relative',
-        // marginBottom: 10,
         color: colors.primary,
     },
     title: {
         fontSize: 13,
-        // fontWeight: 'bold',
         textAlign: 'left',
-        // position: 'relative',
-        // marginBottom: 10,
+        color: colors.primary,
+    },
+    timeTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        padding: 10,
         color: colors.primary,
     },
     logoImage: {
         marginTop: 20,
-        height: 100,
-
+        height: 80,
         resizeMode: 'contain',
         alignSelf: 'center',
     },
     logoImageView: {
-        height: 120,
+        height: 80,
         resizeMode: 'contain',
-        width: 100,
-        borderRadius: 50
+        width: 80,
+        borderRadius: 40,
+        marginTop: -10
     },
     back: {
         alignItems: 'center',
@@ -79,7 +81,6 @@ export const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bottomText: {
-        // alignSelf: 'center',
         color: colors.primary,
         fontSize: 22,
         fontWeight: 'bold',

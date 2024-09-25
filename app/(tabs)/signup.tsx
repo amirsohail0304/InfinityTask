@@ -11,12 +11,10 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  Button,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 
 export default function SignUpScreen() {
@@ -27,34 +25,42 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [termsandconditions, setTermsandconditions] = useState(false);
+  const [messageError, setMessageError] = useState({
+    firstName: false,
+    lastName: false,
+    email: false,
+    phoneNumber: false,
+    password: false,
+    confirmPassword: false,
+  });
+
+  const validateFields = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    const errors = {
+      firstName: firstName === '',
+      lastName: lastName === '',
+      email: !emailRegex.test(email),
+      phoneNumber: !phoneRegex.test(phoneNumber),
+      password: !passwordRegex.test(password),
+      confirmPassword: password !== confirmPassword || confirmPassword === '',
+    };
+    setMessageError(errors);
+    return !Object.values(errors).some((error) => error);
+  };
 
   const signUpWithEmail = async () => {
-    if (email.length && password.length && confirmPassword.length) {
-      if (password !== confirmPassword) {
-        Alert.alert('Passwords do not match!');
-        return;
-      }
+    if (validateFields()) {
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => router.replace('/(tabs)/home'))
         .catch((err) => {
           console.log(err);
         });
     } else {
-      Alert.alert('Invalid Data', 'Please fill email and password');
+      Alert.alert('Invalid Data', 'Please correct the highlighted fields');
     }
-  };
-
-  const handleSignUp = () => {
-    if (password !== confirmPassword) {
-      Alert.alert('Passwords do not match!');
-      return;
-    }
-    console.log('First Name:', firstName);
-    console.log('Last Name:', lastName);
-    console.log('Email:', email);
-    console.log('Phone Number:', phoneNumber);
-    console.log('Password:', password);
-    // Add sign-up logic here
   };
 
   useEffect(() => {
@@ -68,9 +74,8 @@ export default function SignUpScreen() {
   }, []);
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       <JoeLogo />
-
       <View style={styles.secondContainer}>
         <View
           style={{
@@ -81,7 +86,10 @@ export default function SignUpScreen() {
         >
           <View style={{ flex: 1 }}>
             <CustomTextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                messageError.firstName ? styles.errorBorder : null,
+              ]}
               placeholder="First Name"
               value={firstName}
               onChangeText={setFirstName}
@@ -89,47 +97,57 @@ export default function SignUpScreen() {
           </View>
           <View style={{ flex: 1 }}>
             <CustomTextInput
-              style={styles.input}
+              style={[
+                styles.input,
+                messageError.lastName ? styles.errorBorder : null,
+              ]}
               placeholder="Last Name"
               value={lastName}
               onChangeText={setLastName}
             />
           </View>
         </View>
-
         <CustomTextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            messageError.email ? styles.errorBorder : null,
+          ]}
           placeholder="E-mail"
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
-
         <CustomTextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            messageError.phoneNumber ? styles.errorBorder : null,
+          ]}
           placeholder="Phone Number"
           value={phoneNumber}
           onChangeText={setPhoneNumber}
           keyboardType="phone-pad"
         />
-
         <CustomTextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            messageError.password ? styles.errorBorder : null,
+          ]}
           placeholder="Password"
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
-
         <CustomTextInput
-          style={styles.input}
+          style={[
+            styles.input,
+            messageError.confirmPassword ? styles.errorBorder : null,
+          ]}
           placeholder="Confirm Password"
           value={confirmPassword}
           onChangeText={setConfirmPassword}
           secureTextEntry
         />
-
         <View style={styles.rememberContainer}>
           <TouchableOpacity
             onPress={() => setTermsandconditions(!termsandconditions)}
@@ -143,31 +161,20 @@ export default function SignUpScreen() {
               Terms and Conditions
             </Text>
           </Text>
-          {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}> */}
-          {/* <TouchableOpacity onPress={() => null}>
-            <Text style={styles.forgotText}>Forgot Password?</Text>
-          </TouchableOpacity> */}
         </View>
-
-        <TouchableOpacity
-          // title='SIGN IN'
-          onPress={signUpWithEmail}
-          style={styles.signIn}
-        >
+        <TouchableOpacity onPress={signUpWithEmail} style={styles.signIn}>
           <Text style={styles.signinText}>SIGN UP</Text>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => {
             router.replace('/(tabs)/');
           }}
-          // title='SIGN IN'
-          // onPress={handleSignIn}
           style={styles.back}
         >
           <Text style={styles.backText}>BACK TO SIGN IN</Text>
         </TouchableOpacity>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -181,27 +188,6 @@ const styles = StyleSheet.create({
   secondContainer: {
     gap: 20,
   },
-  title: {
-    fontSize: 100,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    // position: 'relative',
-    // marginBottom: 10,
-    color: colors.primary,
-  },
-  logoImage: {
-    // width: 50, // Adjust width as needed
-    height: 50, // Adjust height as needed
-    width: '100%',
-    // position: 'absolute',
-    left: '20%',
-
-    resizeMode: 'contain', // Ensures the image scales correctly
-    alignSelf: 'center', // Centers the image horizontally
-    marginBottom: 20,
-
-    // marginVertical: 20, // Adds space above and below the logo
-  },
   input: {
     height: 50,
     borderColor: colors.white,
@@ -210,11 +196,13 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     paddingHorizontal: 10,
   },
+  errorBorder: {
+    borderColor: colors.primary,
+  },
   rememberContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginBottom: 30,
   },
   checkbox: {
     width: 20,
@@ -256,11 +244,4 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: 'bold',
   },
-  // backText: {
-  //   // marginTop: 20,
-  //   textAlign: 'center',
-  //   color: '#007BFF',
-  //   fontSize: 16,
-  //   fontWeight: 'bold',
-  // },
 });

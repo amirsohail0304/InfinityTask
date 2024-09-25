@@ -3,14 +3,11 @@ import {
     StyleSheet,
     View,
     Text,
-    Alert,
     TouchableOpacity,
 } from 'react-native';
 import colors from '@/components/colors';
-import { useEffect, useState } from 'react';
-import * as ImagePicker from 'expo-image-picker';
+import { useState } from 'react';
 import CustomTextInput from './CustomTextInput';
-import ErrorText from './ErrorComponent';
 import { Picker } from '@react-native-picker/picker';
 import ImagePickerModal from '@/app/(tabs)/modalComponent';
 
@@ -23,37 +20,38 @@ const ImageComponent = (props: any) => {
 
     return (
         <View>
+            <Image
+                source={require('@/assets/images/avatar.png')}
+                style={styles.logoImage}
+            />
             <View style={styles.logoImageView}>
-                <Image
-                    source={require('@/assets/images/avatar.png')}
-                    style={styles.logoImage}
-                />
                 {chatType === "takePhoto" ?
                     <>
-                        <View style={{ flexDirection: "row", justifyContent: "center", gap: 10, marginTop: 20, }}>
+                        <View style={{
+                            flexDirection: "row",
+                            justifyContent: "center",
+                            gap: 10,
+                            marginStart: 10
+                        }}>
                             <TouchableOpacity
-                                // title='SIGN IN'
                                 onPress={() => setModalVisible(true)}
                                 style={styles.back}
                             >
                                 <Text style={styles.backText}>TAKE A PHOTO</Text>
                             </TouchableOpacity>
-                            <View style={{ height: 10, alignItems: "center" }}>
-
+                            <View style={{ height: 10, width: "50%", alignItems: "center" }}>
                                 <CustomTextInput
-                                    style={styles.input}
+                                    style={[styles.input, error ? styles.errorBorder : null]}
                                     placeholder="Enter Name here"
                                     value={value}
-                                    // onChangeText={onChangeText}
                                     onChangeText={text => setChangeValue(text)}
                                 />
-
                             </View>
                         </View>
 
                     </>
                     :
-                    <View style={{ width: "60%", height: 30, borderRadius: 10 }}>
+                    <View style={{ width: "95%", height: 30, borderRadius: 10, marginTop: -10, marginStart: 20, marginBottom: 20 }}>
                         <Picker selectedValue={selectedValue} onValueChange={itemValue => setSelectedValue(itemValue)}
                             dropdownIconColor={colors.primary}
                             style={{ backgroundColor: "white", marginHorizontal: 20 }}
@@ -69,17 +67,9 @@ const ImageComponent = (props: any) => {
                                 color={colors.primary}
                             />
                         </Picker>
-                        <ErrorText
-                            error={error}
-                        />
                     </View>
                 }
             </View>
-            {chatType === "takePhoto" &&
-                <ErrorText
-                    error={error}
-                />
-            }
             <ImagePickerModal
                 visible={modalVisible}
                 onClose={() => setModalVisible(false)}
@@ -91,7 +81,6 @@ const ImageComponent = (props: any) => {
 }
 export default ImageComponent
 const styles = StyleSheet.create({
-
     container: {
         gap: 10,
         flex: 1,
@@ -109,7 +98,6 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         alignSelf: "flex-end"
     },
-
     title: {
         fontSize: 13,
         textAlign: 'left',
@@ -119,7 +107,9 @@ const styles = StyleSheet.create({
         height: 80,
         resizeMode: 'contain',
         width: 80,
-        borderRadius: 40
+        borderRadius: 40,
+        marginStart: 10,
+        marginTop: 10
     },
     logoImageView: {
         width: "100%",
@@ -139,22 +129,22 @@ const styles = StyleSheet.create({
         borderRadius: 5,
         paddingHorizontal: 10,
     },
-
+    errorBorder: {
+        borderColor: colors.primary
+    },
     welcome: {
         fontSize: 25,
         fontWeight: 'medium',
         textAlign: 'left',
-        // position: 'relative',
-        // marginBottom: 10,
         color: colors.primary,
     },
-
     back: {
         alignItems: 'center',
         backgroundColor: colors.primary,
         borderRadius: 5,
         justifyContent: "center",
         paddingHorizontal: 10,
+        width: "50%",
         height: 40
     },
     backText: {
@@ -170,7 +160,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
     },
     bottomText: {
-        // alignSelf: 'center',
         color: colors.primary,
         fontSize: 22,
         fontWeight: 'bold',
