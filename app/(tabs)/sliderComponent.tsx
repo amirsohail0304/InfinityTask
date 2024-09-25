@@ -38,7 +38,10 @@ const CoffeeStepsSlider = (props: any) => {
     };
 
     const _handleNext = () => {
-        carouselRef.current?.next();
+        if (currentIndex < 3) {
+            setCurrentIndex((prev: any) => prev + 1)
+
+        }
     };
 
     const _handlePrev = () => {
@@ -47,20 +50,8 @@ const CoffeeStepsSlider = (props: any) => {
 
     return (
         <>
-            <View style={{ height: 370, marginTop: 70, }}>
-                <Carousel
-                    ref={carouselRef}
-                    data={steps}
-                    renderItem={_renderItem}
-                    loop={false}
-                    width={width}
-                    height={370}
-                    autoPlay={false}
-                    enabled={false}
-                    pagingEnabled={false}
-                    scrollAnimationDuration={1000}
-                    onSnapToItem={(index) => setCurrentIndex(index)}
-                />
+            <View style={{ width: "80%", alignSelf: "flex-end", marginTop: 50 }}>
+                <SliderCard cardData={steps[currentIndex > 2 ? 2 : currentIndex]} />
             </View>
             <ArrowPrevNextButtons
                 currentIndex={currentIndex}

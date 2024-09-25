@@ -4,6 +4,7 @@ import {
     Text,
     FlatList,
     TouchableOpacity,
+    Dimensions,
 } from 'react-native';
 import Footer from '@/components/Footer';
 import { router, useFocusEffect, } from 'expo-router';
@@ -27,9 +28,14 @@ export default function RecipeScreen() {
     const [portaError, setPortaError] = useState<any>("");
     const [currentIndex, setCurrentIndex] = useState<number>(0);
     const [isTimer, setIsTimer] = useState<boolean>(false);
+    const [isStep, setIsStep] = useState<boolean>(false);
+    const [isMachinePrepare, setIsMachinePrepare] = useState<boolean>(false);
     const [timer, setTimer] = useState<any>("");
     const [shotTime, setShotTime] = useState('');
     const [messageShow, setMessageShow] = useState('');
+    const flatListRef = useRef<any>()
+    let lineHeight = 10
+    let message = "Your coffee is good, but follow this recipe again and try to make it even better."
 
     const radioButtons = useMemo(
         () => [
@@ -68,21 +74,22 @@ export default function RecipeScreen() {
                 setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch finer for your next coffee. That will extract a bit more sweetness from the coffee and reduce the acidity. Follow the recipe again next time.")
             }
             else if (time >= 15 && time <= 20) {
-                setMessageShow("")
+                setMessageShow("your coffee is good but follow the following recipe again and try more better")
             }
             else if (time >= 35 && time <= 40) {
-                setMessageShow("")
+                setMessageShow(message)
             }
             else if (time >= 10 && time <= 15) {
-                setMessageShow("")
+                setMessageShow(message)
             }
             else if (time >= 40 && time <= 45) {
-                setMessageShow("")
+                setMessageShow(message)
             }
             else if (time < 10) {
-
+                setMessageShow(message)
             }
             else if (time > 45) {
+                setMessageShow(message)
 
             }
 
@@ -91,11 +98,15 @@ export default function RecipeScreen() {
         else {
             setMessageError("Time field is required")
         }
+
+        handleAutoScroll(450)
     };
     const handleRepeatAgain = () => {
         setCurrentIndex(0)
         setIsTimer(false)
         setMessageShow("")
+        setShotTime("")
+        // setIsMachinePrepare(false)
     }
     // useFocusEffect(
     //     useCallback(() => {
@@ -124,6 +135,7 @@ export default function RecipeScreen() {
         if (selectedValue) {
             setIsPortaValue(true)
             setPortaError("")
+            handleAutoScroll(200)
         }
         else {
             setPortaError("please Select value")
@@ -132,13 +144,34 @@ export default function RecipeScreen() {
     const handleTimerScreen = () => {
         // router.navigate(`/(tabs)/recipeTimer`)
         setIsTimer(true)
+        handleAutoScroll(400)
+    }
+    const handleMachinePrepare = () => {
+        // router.navigate(`/(tabs)/recipeTimer`)
+        setIsMachinePrepare(true)
+
+        handleAutoScroll(140)
     }
     const handleVideoScreen = () => {
         router.navigate(`/(tabs)/recipeVideo`)
     }
+    const handleStep = () => {
+        setIsStep(true)
+        handleAutoScroll(300)
+    }
+    const handleAutoScroll = (position: any) => {
+        console.log("position", position)
+        const screenHeight = Dimensions.get('window').height;
+        const contentHeight = position * lineHeight;
+        console.log("contentHeight", contentHeight, contentHeight > screenHeight - lineHeight * 2)
 
-
-
+        if (contentHeight > screenHeight - lineHeight * 2) {
+            flatListRef.current?.scrollToOffset({
+                offset: contentHeight - screenHeight + lineHeight * 2,
+                animated: true,
+            });
+        }
+    };
 
     const renderItem = ({ item, index }: any) => (
         <>
@@ -176,11 +209,20 @@ export default function RecipeScreen() {
 
                 </>
             }
-            {isPortaValue &&
-                <>
-                    <RecipeChat
-                        chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time"}
-                    />
+            <>
+                {isPortaValue &&
+
+                    <>
+                        <RecipeChat
+                            chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time"}
+                        />
+                        <BtnComponenet
+                            onPress={handleMachinePrepare}
+                            btnText="Continue"
+                        />
+                    </>
+                }
+                {isMachinePrepare &&
                     <View>
                         <View style={styles.secondContainer}>
                             <Text style={styles.title}>
@@ -188,13 +230,13 @@ export default function RecipeScreen() {
                                 {"\n"}{"\n"}
                                 There are 3 variables you need to remember when making coffee:
                                 {"\n"}
-                                <Text style={styles.bold}>1. DOSE</Text> - the amount of ground coffee that goes IN to the basket (18g on your Machine)
+                                <Text style={styles.bold}>1. DOSE</Text> - the amount of ground coffee that goes IN to the basket ({selectedValue === "58mm" ? "21g" : "18g"} on your Machine)
                                 {"\n"}{"\n"}
                                 <Text style={styles.bold}>2. YIELD</Text> - the amount of espresso you want in your cup.
                                 {"\n"}{"\n"}
                                 <Text style={styles.bold}>3. TIME</Text> - the time it takes to achieve the desired yield. (25-30 Seconds). We adjust the grind to get the time into this window. The first 2 variables are constant. They always stay the same. Variable 3 is what we adjust.
                                 {"\n"}{"\n"}
-                                BORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence 18g to 36g.
+                                BORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence {selectedValue === "58mm" ? "21g to 42g" : "18g to 36g"}.
                                 {"\n"}{"\n"}
                                 Confused? Great, me too after that. Let's make some coffee and it will start to make sense.
                             </Text>
@@ -205,31 +247,37 @@ export default function RecipeScreen() {
                                 style={styles.logoImage}
                             />
                         </View>
+                        <BtnComponenet
+                            onPress={handleStep}
+                            btnText="Continue"
+                        />
                     </View>
+                }
+                {isStep &&
                     <View style={{ marginTop: -20 }}>
                         <CoffeeStepsSlider
                             setCurrentIndex={setCurrentIndex}
                             currentIndex={currentIndex}
                         />
                     </View>
-                </>
-            }
-            {currentIndex === 2 &&
+                }
+            </>
+            {currentIndex === 3 &&
                 <RecipeChat
                     chatText={"Dont quite get it? Watch this video?"}
                 />}
-            {currentIndex === 2 &&
+            {currentIndex === 3 &&
                 <BtnComponenet
                     onPress={handleVideoScreen}
                     btnText="Now Go"
                 />
             }
-            {currentIndex === 2 &&
+            {currentIndex === 3 &&
                 <RecipeChat
-                    chatText={"How Did you go? Your Dose was 18g. Your Yeild was 36g ish. What time did you stop your clock at?"}
+                    chatText={`How Did you go? Your Dose was ${selectedValue === "58mm" ? "21g" : "18g"}. Your Yeild was ${selectedValue === "58mm" ? "42g" : "36g"} ish. What time did you stop your clock at?`}
                 />
             }
-            {currentIndex === 2 &&
+            {currentIndex === 3 &&
                 <BtnComponenet
                     onPress={handleTimerScreen}
                     btnText="Continue"
@@ -295,6 +343,7 @@ export default function RecipeScreen() {
         <Footer aspectRatio="small">
             <FlatList
                 data={[0]}
+                ref={flatListRef}
                 renderItem={renderItem}
                 keyExtractor={(item, index) => index.toString()}
             />
