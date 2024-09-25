@@ -9,26 +9,25 @@ import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
-  TextInput,
-  Button,
   TouchableOpacity,
   StyleSheet,
-  Image,
   Dimensions,
   Alert,
 } from 'react-native';
-// import FooterSVG from '@/assets/images/footer.svg';
+
 export default function SignInScreen() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
+  const [messageError, setMessageError] = useState({
+    email: false,
+    password: false,
+  });
 
-  const handleSignIn = () => {
-    // Handle sign-in logic here
-    console.log('Email:', email);
-    console.log('Password:', password);
-    console.log('Remember Me:', rememberMe);
-  };
+  // console.log('Email:', email);
+  // console.log('Password:', password);
+  // console.log('Remember Me:', rememberMe);
+
 
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
@@ -40,46 +39,73 @@ export default function SignInScreen() {
     return () => unsub();
   }, []);
 
+  const validateFields = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
+
+    const isEmailValid = emailRegex.test(email);
+    const isPhoneNumberValid = phoneRegex.test(email);
+    const isValidePassword = passwordRegex.test(password)
+    if (!isEmailValid && !isPhoneNumberValid) {
+      Alert.alert('Invalid email or phone number format');
+    }
+    if (!passwordRegex.test(password)) {
+      Alert.alert(
+        'Invalid password',
+        'Password must be at least 8 characters long, contain at least one uppercase letter, and one number.'
+      );
+    }
+
+    const errors = {
+      email: !isEmailValid,
+      password: !isValidePassword,
+    };
+    setMessageError(errors);
+    setMessageError(errors);
+    return !Object.values(errors).some((error) => error);
+  };
+
   const signInWithEmail = async () => {
-    signInWithEmailAndPassword(auth, email, password)
-      .then(() => router.replace('/(tabs)/home'))
-      .catch((err) => {
-        console.log(err);
-        Alert.alert(err.message);
-      });
+    if (validateFields()) {
+      signInWithEmailAndPassword(auth, email, password)
+        .then(() => router.replace('/(tabs)/home'))
+        .catch((err) => {
+          console.log(err);
+          Alert.alert(err.message);
+        });
+    }
   };
 
   return (
     <Footer>
       <View style={styles.container}>
         <JoeLogo />
-
         <View style={styles.secondContainer}>
-          <Text
-            // adjustsFontSizeToFit={true}
-            // numberOfLines={1}
-            style={styles.subtitle}
-          >
+          <Text style={styles.subtitle}>
             Helping you dial in coffee at home
           </Text>
-
           <CustomTextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              messageError.email ? styles.errorBorder : null,
+            ]}
             placeholder="E-mail / Phone Number / Username"
             value={email}
             onChangeText={setEmail}
             keyboardType="email-address"
             autoCapitalize="none"
           />
-
           <CustomTextInput
-            style={styles.input}
+            style={[
+              styles.input,
+              messageError.password ? styles.errorBorder : null,
+            ]}
             placeholder="Password"
             value={password}
             onChangeText={setPassword}
             secureTextEntry
           />
-
           <View style={styles.rememberContainer}>
             <TouchableOpacity
               onPress={() => setRememberMe(!rememberMe)}
@@ -88,23 +114,16 @@ export default function SignInScreen() {
               {rememberMe && <View style={styles.checkboxChecked} />}
             </TouchableOpacity>
             <Text style={styles.rememberText}>Remember Me</Text>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('ForgotPassword')}> */}
             <TouchableOpacity onPress={() => null}>
               <Text style={styles.forgotText}>Forgot Password?</Text>
             </TouchableOpacity>
           </View>
-
-          <TouchableOpacity
-            // title='SIGN IN'
-            onPress={signInWithEmail}
-            style={styles.signIn}
-          >
+          <TouchableOpacity onPress={signInWithEmail} style={styles.signIn}>
             <Text style={styles.signinText}>SIGN IN</Text>
           </TouchableOpacity>
 
           <View style={styles.signupContainer}>
             <Text style={styles.signupText}>Don’t have an account?</Text>
-            {/* <TouchableOpacity onPress={() => navigation.navigate('SignUp')}> */}
             <TouchableOpacity
               onPress={() => {
                 router.replace('/(tabs)/signup');
@@ -114,58 +133,39 @@ export default function SignInScreen() {
             </TouchableOpacity>
           </View>
         </View>
-
-        {/* <View>
-        <View></View>
-        <View></View>
-      </View> */}
       </View>
     </Footer>
   );
 }
+
 const screenWidth = Dimensions.get('window').width;
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: 15,
-    // alignItems: 'center',
+    marginTop: 25,
     justifyContent: 'space-between',
     paddingHorizontal: 20,
     backgroundColor: colors.background,
   },
-
   secondContainer: {
-    // flex: 1,
-    // justifyContent: 'center',
     gap: 20,
-    // backgroundColor: colors.background,
   },
   title: {
     fontSize: 80,
     fontWeight: 'bold',
     textAlign: 'center',
-    // position: 'relative',
-    // marginBottom: 10,
     color: colors.primary,
   },
   logoImage: {
-    // width: 50, // Adjust width as needed
-    height: 40, // Adjust height as needed
+    height: 40,
     width: '100%',
-    // position: 'absolute',
     left: '20%',
-
-    resizeMode: 'contain', // Ensures the image scales correctly
-    alignSelf: 'center', // Centers the image horizontally
+    resizeMode: 'contain',
+    alignSelf: 'center',
     marginBottom: 20,
-    // marginVertical: 20, // Adds space above and below the logo
   },
   subtitle: {
     textAlign: 'center',
     fontWeight: '600',
-    // fontSize: 20,
-    // fontWeight: "500",
-    // marginBottom: 30,
     fontSize: screenWidth * 0.055,
   },
   input: {
@@ -175,13 +175,14 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 5,
     paddingHorizontal: 10,
-    // marginBottom: 20,
+  },
+  errorBorder: {
+    borderColor: colors.primary,
   },
   rememberContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    // marginBottom: 30,
   },
   checkbox: {
     width: 20,
@@ -218,7 +219,6 @@ const styles = StyleSheet.create({
   signupContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    // marginTop: 20,
   },
   signupText: {
     fontSize: 16,

@@ -2,6 +2,12 @@ import { StyleSheet } from "react-native";
 import colors from "../colors";
 
 export const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        // paddingHorizontal: 20,
+        backgroundColor: colors.background,
+        marginTop: 20,
+    },
     input: {
         height: 50,
         borderColor: colors.white,
@@ -9,6 +15,9 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         paddingHorizontal: 10,
+    },
+    errorBorder: {
+        borderColor: colors.primary
     },
     bold: {
         fontWeight: 'bold',
@@ -31,6 +40,13 @@ export const styles = StyleSheet.create({
     title: {
         fontSize: 13,
         textAlign: 'left',
+        color: colors.primary,
+    },
+    timeTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        textAlign: 'left',
+        padding: 10,
         color: colors.primary,
     },
     logoImage: {
