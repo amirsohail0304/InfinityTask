@@ -5,18 +5,11 @@ import BtnComponenet from '@/components/BtnComponenet';
 import colors from '@/components/colors';
 
 interface ArrowPrevNextButtonsProps {
-    handlePrev: () => void;
     handleNext: () => void;
-    cardData: any;
-    currentIndex: number;
 }
 
-const ArrowPrevNextButtons: React.FC<ArrowPrevNextButtonsProps> = ({
-    currentIndex,
-    cardData,
-    handlePrev,
-    handleNext,
-}) => {
+const ArrowPrevNextButtons = (props: any) => {
+    const { handleNext } = props
     return (
         <View style={styles.arrowBtnsContainer}>
             {/* <BtnComponenet
@@ -26,7 +19,7 @@ const ArrowPrevNextButtons: React.FC<ArrowPrevNextButtonsProps> = ({
 
             <BtnComponenet
                 onPress={handleNext}
-                btnText="Next"
+                btnText="Continue"
             />
         </View>
     );
