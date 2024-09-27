@@ -42,31 +42,63 @@ export default function SignInScreen() {
   const validateFields = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
     const isEmailValid = emailRegex.test(email);
     const isPhoneNumberValid = phoneRegex.test(email);
-    const isValidePassword = passwordRegex.test(password)
+
+    // Check if the password is less than or equal to 6 characters
+    const isPasswordValid = password.length <= 6;
+
     if (!isEmailValid && !isPhoneNumberValid) {
       Alert.alert('Invalid email or phone number format');
     }
-    if (!passwordRegex.test(password)) {
+    if (!isPasswordValid) {
       Alert.alert(
         'Invalid password',
-        'Password must be at least 8 characters long, contain at least one uppercase letter, and one number.'
+        'Password must be more than 6 characters long.'
       );
     }
 
     const errors = {
       email: !isEmailValid,
-      password: !isValidePassword,
+      password: !isPasswordValid,
     };
-    setMessageError(errors);
     setMessageError(errors);
     return !Object.values(errors).some((error) => error);
   };
 
+  // const validateFields = () => {
+  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  //   const phoneRegex = /^\+?[1-9]\d{1,14}$/;
+
+  //   const isEmailValid = emailRegex.test(email);
+  //   const isPhoneNumberValid = phoneRegex.test(email);
+
+  //   // Check if the password is less than or equal to 6 characters
+  //   const isPasswordValid = password.length > 6;
+
+  //   if (!isEmailValid && !isPhoneNumberValid) {
+  //     Alert.alert('Invalid email or phone number format');
+  //   }
+  //   if (!isPasswordValid) {
+  //     Alert.alert(
+  //       'Invalid password',
+  //       'Password must be more than 6 characters long.'
+  //     );
+  //   }
+
+  //   const errors = {
+  //     email: !isEmailValid,
+  //     password: !isPasswordValid,
+  //   };
+
+  //   setMessageError(errors);
+  //   return !Object.values(errors).some((error) => error);
+  // };
+
+
   const signInWithEmail = async () => {
+    router.replace('/(tabs)/home')
     if (validateFields()) {
       signInWithEmailAndPassword(auth, email, password)
         .then(() => router.replace('/(tabs)/home'))

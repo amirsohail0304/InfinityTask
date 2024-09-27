@@ -10,37 +10,16 @@ import {
     Easing,
 } from 'react-native';
 import Footer from '@/components/Footer';
-import { router, useFocusEffect, } from 'expo-router';
-import { Fragment, useCallback, useMemo, useRef, useState } from 'react';
+import { router } from 'expo-router';
+import { Fragment, useMemo, useRef, useState } from 'react';
 import RecipeChat from '@/components/RecipeChat';
 import BtnComponenet from '@/components/BtnComponenet';
 import { styles } from '@/components/navigation/recipeSTyle';
 import ImageComponent from '@/components/ImageComponent';
-import CoffeeStepsSlider from './sliderComponent';
 import GoBackButton from './backButton';
-import AntDesign from '@expo/vector-icons/AntDesign';
 import CustomTextInput from '@/components/CustomTextInput';
 import colors from '@/components/colors';
-const steps = [
-    {
-        title: 'Step 1 - DOSE',
-        description: `- Remove your warm portafilter from the grouphead and dry the basket with a dry cloth. 
-- Place the group handle on the scales and tare to "0.00".
-- Grind 18g of coffee into your basket, settling the coffee as you go.
-- Use your WDT tool to distribute and tamp the coffee, then insert the portafilter into the grouphead.`,
-    },
-    {
-        title: 'Step 2 - YIELD',
-        description: `- Place scales on the drip tray and tare to 0. 
-- Put a cup on the scales and start a shot. 
-- Monitor the weight to ensure it reaches 33g, letting it drip out to 36g.`,
-    },
-    {
-        title: 'Step 3 - TIME',
-        description: `- Start the shot and time it.
-- Stop the shot when your scales hit 33g, and allow it to drip to 36g.`,
-    },
-];
+
 export default function RecipeScreen() {
     const [isPortafilterSize, setIsPortafilterSize] = useState<boolean>(false);
     const [selectedValue, setSelectedValue] = useState<any>("");
@@ -96,6 +75,7 @@ export default function RecipeScreen() {
             console.log(time);
         } else {
             setMessageError("No integer found")
+            return;
         }
         if (time) {
             if (time >= 25 && time <= 30) {
@@ -149,24 +129,12 @@ export default function RecipeScreen() {
         ]
         setCoffeeRecipe([...coffeeRecipe, ...newArray])
         setShotTime("")
-        setMessageShow("")
+        // setMessageShow("")
+        setMessageError("")
         setIsHelp(false)
         setVisible(false)
         // setIsMachinePrepare(false)
     }
-    // useFocusEffect(
-    //     useCallback(() => {
-    //         return () => {
-    //             setIsPortafilterSize(false)
-    //             setSelectedValue("")
-    //             setIsPortaValue(false)
-    //             setNameValue("")
-    //             setMessageError("")
-    //             setPortaError("")
-    //             setCurrentIndex(0)
-    //         }
-    //     }, [])
-    // );
     const handlePortaSize = () => {
         if (nameValue?.trim()?.length > 0) {
             setIsPortafilterSize(true)
@@ -238,25 +206,22 @@ export default function RecipeScreen() {
         setVisible(true)
         setIsHelp(true)
         Animated.timing(fadeAnim, {
-            toValue: 1, // Fully visible
-            duration: 500, // Animation duration (in ms)
+            toValue: 1,
+            duration: 500,
             useNativeDriver: true,
             easing: Easing.ease,
         }).start(() => {
-            // After fade-in, wait for 5 seconds and then fade out
             setTimeout(() => {
-                // Animate the popup to fade out
                 Animated.timing(fadeAnim, {
-                    toValue: 0, // Fully hidden
-                    duration: 500, // Animation duration (in ms)
+                    toValue: 0,
+                    duration: 500,
                     useNativeDriver: true,
                     easing: Easing.ease,
                 }).start(() => {
-                    setVisible(false); // Hide the popup completely
+                    setVisible(false);
                 });
-            }, 5000); // Wait for 5 seconds
+            }, 5000);
         });
-        // router.navigate(`/(tabs)/recipeVideo`)
     }
     const handleVideoScreen1 = () => {
         router.navigate(`/(tabs)/recipeVideo`)
@@ -286,7 +251,6 @@ export default function RecipeScreen() {
     };
     const renderItem = ({ item, index }: any) => (
         <>
-            <GoBackButton />
             <View style={{ marginTop: 90 }}>
                 <RecipeChat
                     chatText={"Okay so I need to know what coffee you are using? You can type below or take a photo and upload the bag."}
@@ -305,7 +269,7 @@ export default function RecipeScreen() {
             {isPortafilterSize &&
                 <>
                     <RecipeChat
-                        chatText={"Okay great. Firstly what tise portafilter does your machine have?"}
+                        chatText={"Okay great. Firstly what sise portafilter does your machine have?"}
                     />
                     <ImageComponent
                         error={portaError}
@@ -327,6 +291,12 @@ export default function RecipeScreen() {
                     <RecipeChat
                         chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time"}
                     />
+                    <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                        <Image
+                            source={require('@/assets/images/avatar.png')}
+                            style={styles.logoImage}
+                        />
+                    </View>
                     <BtnComponenet
                         onPress={handleMachinePrepare}
                         btnText="Continue"
@@ -339,7 +309,7 @@ export default function RecipeScreen() {
                 >
                     {item.isMachinePrepare &&
                         <View>
-                            <View style={styles.secondContainer}>
+                            {/* <View style={styles.secondContainer}>
                                 <Text style={styles.title}>
                                     Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.
                                     {"\n"}{"\n"}
@@ -355,8 +325,12 @@ export default function RecipeScreen() {
                                     {"\n"}{"\n"}
                                     Confused? Great, me too after that. Let's make some coffee and it will start to make sense.
                                 </Text>
-                            </View>
-                            <View style={styles.logoImageView}>
+                            </View> */}
+                            <RecipeChat
+                                chatText={`Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.\n\nThere are 3 variables you need to remember when making coffee:\n\n1. DOSE - the amount of ground coffee that goes IN to the basket (${selectedValue === "58mm" ? "21g" : "18g"} on your Machine)\n\n2. YIELD - the amount of espresso you want in your cup.\n\n3. TIME - the time it takes to achieve the desired yield. (25-30 Seconds). We adjust the grind to get the time into this window. The first 2 variables are constant. They always stay the same. Variable 3 is what we adjust.\n\nBORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence ${selectedValue === "58mm" ? "21g to 42g" : "18g to 36g"}.\n\nConfused? Great, me too after that. Let's make some coffee and it will start to make sense.`}
+                            />
+
+                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
@@ -370,12 +344,17 @@ export default function RecipeScreen() {
 
                     }
                     {item.isStep1 &&
-                        <View style={{ marginTop: -20 }}>
-                            <CoffeeStepsSlider
-                                setCurrentIndex={setCurrentIndex}
-                                currentIndex={currentIndex}
-                                cardData={steps[0]}
+                        <View>
+                            <RecipeChat
+                                chatText={`Step 1 - DOSE\n- Remove your warm portafilter from the grouphead and dry the basket with a dry cloth.\n- Place the group handle on the scales and tare to 0.00.\n- Grind 18g of coffee into your basket, settling the coffee as you go.\n- Use your WDT tool to distribute and tamp the coffee, then insert the portafilter into the grouphead.`}
                             />
+
+                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                <Image
+                                    source={require('@/assets/images/avatar.png')}
+                                    style={styles.logoImage}
+                                />
+                            </View>
                             <BtnComponenet
                                 onPress={handleStep2}
                                 btnText="Continue"
@@ -383,12 +362,16 @@ export default function RecipeScreen() {
                         </View>
                     }
                     {item.isStep2 &&
-                        <View style={{ marginTop: -20 }}>
-                            <CoffeeStepsSlider
-                                setCurrentIndex={setCurrentIndex}
-                                currentIndex={currentIndex}
-                                cardData={steps[1]}
+                        <View>
+                            <RecipeChat
+                                chatText={`Step 2 - YIELD\n- Place scales on the drip tray and tare to 0.\n- Put a cup on the scales and start a shot.\n- Monitor the weight to ensure it reaches 33g, letting it drip out to 36g.`}
                             />
+                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                <Image
+                                    source={require('@/assets/images/avatar.png')}
+                                    style={styles.logoImage}
+                                />
+                            </View>
                             <BtnComponenet
                                 onPress={handleStep3}
                                 btnText="Continue"
@@ -396,12 +379,16 @@ export default function RecipeScreen() {
                         </View>
                     }
                     {item.isStep3 &&
-                        <View style={{ marginTop: -20 }}>
-                            <CoffeeStepsSlider
-                                setCurrentIndex={setCurrentIndex}
-                                currentIndex={currentIndex}
-                                cardData={steps[2]}
+                        <View>
+                            <RecipeChat
+                                chatText={`Step 3 - TIME\n- Start the shot and time it.\n- Stop the shot when your scales hit 33g, and allow it to drip to 36g.`}
                             />
+                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                <Image
+                                    source={require('@/assets/images/avatar.png')}
+                                    style={styles.logoImage}
+                                />
+                            </View>
                             <BtnComponenet
                                 onPress={handleVideoScreen}
                                 btnText="Continue"
@@ -410,10 +397,15 @@ export default function RecipeScreen() {
                     }
                     {item.isVideo &&
                         <>
-
                             <RecipeChat
                                 chatText={`How Did you go? Your Dose was ${selectedValue === "58mm" ? "21g" : "18g"}. Your Yeild was ${selectedValue === "58mm" ? "42g" : "36g"} ish. What time did you stop your clock at?`}
                             />
+                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                <Image
+                                    source={require('@/assets/images/avatar.png')}
+                                    style={styles.logoImage}
+                                />
+                            </View>
                             <BtnComponenet
                                 onPress={handleTimerScreen}
                                 btnText="Continue"
@@ -422,16 +414,22 @@ export default function RecipeScreen() {
                     }
                     {item.isTimer &&
                         <View style={styles.container}>
-                            <View style={{ paddingHorizontal: 10, }}>
-                                <Text style={styles.timeTitle}>Enter your Time</Text>
-                            </View>
-                            <View style={{ paddingHorizontal: 20, }}>
+                            <View style={{ paddingHorizontal: 10, width: "80%", alignSelf: 'flex-end' }}>
+                                <View style={{ marginStart: -10, }}>
+                                    <Text style={styles.timeTitle}>Enter your Time</Text>
+                                </View>
                                 <CustomTextInput
                                     style={[styles.input, messageError ? styles.errorBorder : null]}
                                     placeholder="Enter your time here"
                                     value={shotTime}
                                     keyboardType='number-pad'
                                     onChangeText={text => setShotTime(text)}
+                                />
+                            </View>
+                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                <Image
+                                    source={require('@/assets/images/avatar.png')}
+                                    style={styles.logoImage}
                                 />
                             </View>
                             <BtnComponenet
@@ -447,6 +445,12 @@ export default function RecipeScreen() {
                                     <RecipeChat
                                         chatText={"Now, can you go through these steps again?"}
                                     />
+                                    <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                        <Image
+                                            source={require('@/assets/images/avatar.png')}
+                                            style={styles.logoImage}
+                                        />
+                                    </View>
                                     <BtnComponenet
                                         onPress={handleRepeatAgain}
                                         btnText="Repeat Again"
@@ -462,6 +466,7 @@ export default function RecipeScreen() {
     )
     return (
         <Footer aspectRatio="small">
+            <GoBackButton />
             <FlatList
                 data={[0]}
                 ref={flatListRef}
@@ -487,7 +492,7 @@ export default function RecipeScreen() {
                 </Animated.View>
             }
             {isHelp &&
-                <TouchableOpacity style={styless.bottomContainer}
+                <TouchableOpacity style={styless.btnContainer}
                     onPress={handleVideoScreen1}
 
                 >
@@ -500,8 +505,9 @@ export default function RecipeScreen() {
 
 const styless = StyleSheet.create({
     bottomText: {
-        color: 'rgba(0, 0, 0, 0.5)',
-        fontSize: 16,
+        // color: 'rgba(0, 0, 0, 0.5)',
+        color: colors.white,
+        fontSize: 14,
         fontWeight: 'bold',
     },
     bottomContainer: {
@@ -513,6 +519,18 @@ const styless = StyleSheet.create({
         position: "absolute",
         right: 10,
         top: 30
+    },
+    btnContainer: {
+        backgroundColor: colors.primary,
+        width: "18%",
+        padding: 10,
+        borderRadius: 30,
+        position: "absolute",
+        alignItems: 'center',
+        justifyContent: 'center',
+        left: 10,
+        top: 110,
+        zIndex: 2
     },
     container: {
         backgroundColor: colors.white,

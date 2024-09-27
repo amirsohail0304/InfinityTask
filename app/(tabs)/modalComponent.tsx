@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import {
     Modal,
     StyleSheet,
@@ -19,9 +19,17 @@ interface ImagePickerModalProps {
 
 const ImagePickerModal: React.FC<ImagePickerModalProps> = ({ visible, onClose, onImagePicked }) => {
     const pickImage = async (option: 'camera' | 'gallery') => {
+        const permissionsGranted = await handlePermissions();
+        if (!permissionsGranted) {
+            Alert.alert(
+                "Permissions Denied",
+                "You need to allow permissions to access the camera or gallery."
+            );
+            return;
+        }
         onClose();
         if (option === 'camera') {
-            let cameraResult = await ImagePicker.launchCameraAsync({
+            const cameraResult = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
@@ -32,7 +40,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({ visible, onClose, o
                 onImagePicked(cameraResult.assets[0].uri);
             }
         } else if (option === 'gallery') {
-            let galleryResult = await ImagePicker.launchImageLibraryAsync({
+            const galleryResult = await ImagePicker.launchImageLibraryAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
                 allowsEditing: true,
                 aspect: [4, 3],
@@ -45,18 +53,20 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({ visible, onClose, o
         }
     };
 
-    useEffect(() => {
-        (async () => {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert('Permission required', 'Sorry, we need camera roll permissions to make this work!');
+    const handlePermissions = async () => {
+        try {
+            const cameraPermissions = await ImagePicker.requestCameraPermissionsAsync();
+            const mediaLibraryPermissions = await ImagePicker.requestMediaLibraryPermissionsAsync();
+
+            if (cameraPermissions.status !== 'granted' || mediaLibraryPermissions.status !== 'granted') {
+                return false;
             }
-            const { status: cameraStatus } = await ImagePicker.requestCameraPermissionsAsync();
-            if (cameraStatus !== 'granted') {
-                Alert.alert('Permission required', 'Sorry, we need camera permissions to make this work!');
-            }
-        })();
-    }, []);
+            return true;
+        } catch (error) {
+            console.error("Permissions error:", error);
+            return false;
+        }
+    };
 
     return (
         <Modal
