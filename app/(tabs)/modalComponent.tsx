@@ -27,7 +27,6 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({ visible, onClose, o
             );
             return;
         }
-        onClose();
         if (option === 'camera') {
             const cameraResult = await ImagePicker.launchCameraAsync({
                 mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -51,6 +50,7 @@ const ImagePickerModal: React.FC<ImagePickerModalProps> = ({ visible, onClose, o
                 onImagePicked(galleryResult.assets[0].uri);
             }
         }
+        onClose();
     };
 
     const handlePermissions = async () => {

@@ -23,12 +23,6 @@ export default function SignInScreen() {
     email: false,
     password: false,
   });
-
-  // console.log('Email:', email);
-  // console.log('Password:', password);
-  // console.log('Remember Me:', rememberMe);
-
-
   useEffect(() => {
     const unsub = onAuthStateChanged(auth, (user) => {
       if (user) {
@@ -42,13 +36,9 @@ export default function SignInScreen() {
   const validateFields = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-
     const isEmailValid = emailRegex.test(email);
     const isPhoneNumberValid = phoneRegex.test(email);
-
-    // Check if the password is less than or equal to 6 characters
     const isPasswordValid = password.length <= 6;
-
     if (!isEmailValid && !isPhoneNumberValid) {
       Alert.alert('Invalid email or phone number format');
     }
@@ -58,7 +48,6 @@ export default function SignInScreen() {
         'Password must be more than 6 characters long.'
       );
     }
-
     const errors = {
       email: !isEmailValid,
       password: !isPasswordValid,
@@ -66,36 +55,6 @@ export default function SignInScreen() {
     setMessageError(errors);
     return !Object.values(errors).some((error) => error);
   };
-
-  // const validateFields = () => {
-  //   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  //   const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-
-  //   const isEmailValid = emailRegex.test(email);
-  //   const isPhoneNumberValid = phoneRegex.test(email);
-
-  //   // Check if the password is less than or equal to 6 characters
-  //   const isPasswordValid = password.length > 6;
-
-  //   if (!isEmailValid && !isPhoneNumberValid) {
-  //     Alert.alert('Invalid email or phone number format');
-  //   }
-  //   if (!isPasswordValid) {
-  //     Alert.alert(
-  //       'Invalid password',
-  //       'Password must be more than 6 characters long.'
-  //     );
-  //   }
-
-  //   const errors = {
-  //     email: !isEmailValid,
-  //     password: !isPasswordValid,
-  //   };
-
-  //   setMessageError(errors);
-  //   return !Object.values(errors).some((error) => error);
-  // };
-
 
   const signInWithEmail = async () => {
     router.replace('/(tabs)/home')

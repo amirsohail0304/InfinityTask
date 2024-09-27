@@ -269,7 +269,7 @@ export default function RecipeScreen() {
             {isPortafilterSize &&
                 <>
                     <RecipeChat
-                        chatText={"Okay great. Firstly what sise portafilter does your machine have?"}
+                        chatText={"Okay great. Firstly what size portafilter does your machine have?"}
                     />
                     <ImageComponent
                         error={portaError}
