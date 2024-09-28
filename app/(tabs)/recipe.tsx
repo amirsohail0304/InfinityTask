@@ -304,21 +304,20 @@ export default function RecipeScreen() {
             }
 
             {isPortaValue &&
-
                 <>
                     <RecipeChat
                         chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time"}
                     />
-                    <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                    <BtnComponenet
+                        onPress={handleMachinePrepare}
+                        btnText="Continue"
+                    />
+                    <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                         <Image
                             source={require('@/assets/images/avatar.png')}
                             style={styles.logoImage}
                         />
                     </View>
-                    <BtnComponenet
-                        onPress={handleMachinePrepare}
-                        btnText="Continue"
-                    />
                 </>
             }
             {coffeeRecipe?.map((item: any, index: any) =>
@@ -347,17 +346,16 @@ export default function RecipeScreen() {
                             <RecipeChat
                                 chatText={`Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.\n\nThere are 3 variables you need to remember when making coffee:\n\n1. DOSE - the amount of ground coffee that goes IN to the basket (${selectedValue === "58mm" ? "21g" : "18g"} on your Machine)\n\n2. YIELD - the amount of espresso you want in your cup.\n\n3. TIME - the time it takes to achieve the desired yield. (25-30 Seconds). We adjust the grind to get the time into this window. The first 2 variables are constant. They always stay the same. Variable 3 is what we adjust.\n\nBORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence ${selectedValue === "58mm" ? "21g to 42g" : "18g to 36g"}.\n\nConfused? Great, me too after that. Let's make some coffee and it will start to make sense.`}
                             />
-
-                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                            <BtnComponenet
+                                onPress={handleStep1}
+                                btnText="Continue"
+                            />
+                            <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
                                 />
                             </View>
-                            <BtnComponenet
-                                onPress={handleStep1}
-                                btnText="Continue"
-                            />
                         </View>
 
                     }
@@ -366,17 +364,16 @@ export default function RecipeScreen() {
                             <RecipeChat
                                 chatText={`Step 1 - DOSE\n- Remove your warm portafilter from the grouphead and dry the basket with a dry cloth.\n- Place the group handle on the scales and tare to 0.00.\n- Grind 18g of coffee into your basket, settling the coffee as you go.\n- Use your WDT tool to distribute and tamp the coffee, then insert the portafilter into the grouphead.`}
                             />
-
-                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                            <BtnComponenet
+                                onPress={handleStep2}
+                                btnText="Continue"
+                            />
+                            <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
                                 />
                             </View>
-                            <BtnComponenet
-                                onPress={handleStep2}
-                                btnText="Continue"
-                            />
                         </View>
                     }
                     {item.isStep2 &&
@@ -384,16 +381,16 @@ export default function RecipeScreen() {
                             <RecipeChat
                                 chatText={`Step 2 - YIELD\n- Place scales on the drip tray and tare to 0.\n- Put a cup on the scales and start a shot.\n- Monitor the weight to ensure it reaches 33g, letting it drip out to 36g.`}
                             />
-                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                            <BtnComponenet
+                                onPress={handleStep3}
+                                btnText="Continue"
+                            />
+                            <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
                                 />
                             </View>
-                            <BtnComponenet
-                                onPress={handleStep3}
-                                btnText="Continue"
-                            />
                         </View>
                     }
                     {item.isStep3 &&
@@ -401,16 +398,16 @@ export default function RecipeScreen() {
                             <RecipeChat
                                 chatText={`Step 3 - TIME\n- Start the shot and time it.\n- Stop the shot when your scales hit 33g, and allow it to drip to 36g.`}
                             />
-                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                            <BtnComponenet
+                                onPress={handleVideoScreen}
+                                btnText="Continue"
+                            />
+                            <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
                                 />
                             </View>
-                            <BtnComponenet
-                                onPress={handleVideoScreen}
-                                btnText="Continue"
-                            />
                         </View>
                     }
                     {item.isVideo &&
@@ -418,16 +415,16 @@ export default function RecipeScreen() {
                             <RecipeChat
                                 chatText={`How Did you go? Your Dose was ${selectedValue === "58mm" ? "21g" : "18g"}. Your Yeild was ${selectedValue === "58mm" ? "42g" : "36g"} ish. What time did you stop your clock at?`}
                             />
-                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                            <BtnComponenet
+                                onPress={handleTimerScreen}
+                                btnText="Continue"
+                            />
+                            <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
                                 />
                             </View>
-                            <BtnComponenet
-                                onPress={handleTimerScreen}
-                                btnText="Continue"
-                            />
                         </>
                     }
                     {item.isTimer &&
@@ -444,16 +441,16 @@ export default function RecipeScreen() {
                                     onChangeText={text => setShotTime(text)}
                                 />
                             </View>
-                            <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                            <BtnComponenet
+                                onPress={handleResult}
+                                btnText="Continue"
+                            />
+                            <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                 <Image
                                     source={require('@/assets/images/avatar.png')}
                                     style={styles.logoImage}
                                 />
                             </View>
-                            <BtnComponenet
-                                onPress={handleResult}
-                                btnText="Continue"
-                            />
                             {item.messageShow &&
                                 <RecipeChat
                                     chatText={item.messageShow}
@@ -463,16 +460,16 @@ export default function RecipeScreen() {
                                     <RecipeChat
                                         chatText={"Now, can you go through these steps again?"}
                                     />
-                                    <View style={[styles.logoImageView, { marginStart: 10 }]}>
+                                    <BtnComponenet
+                                        onPress={handleRepeatAgain}
+                                        btnText="Repeat Again"
+                                    />
+                                    <View style={[styles.logoImageView, { marginStart: 10, marginTop: -50 }]}>
                                         <Image
                                             source={require('@/assets/images/avatar.png')}
                                             style={styles.logoImage}
                                         />
                                     </View>
-                                    <BtnComponenet
-                                        onPress={handleRepeatAgain}
-                                        btnText="Repeat Again"
-                                    />
                                 </>
                             }
                         </View>
