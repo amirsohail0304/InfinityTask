@@ -42,6 +42,8 @@ export default function RecipeScreen() {
         isStep3: false,
         isTimer: false,
         isVideo: false,
+        inputvalue: "",
+        messageShow: ""
     }]);
     const [isMachinePrepare, setIsMachinePrepare] = useState<boolean>(false);
     const [timer, setTimer] = useState<any>("");
@@ -66,6 +68,14 @@ export default function RecipeScreen() {
         ],
         []
     );
+    const handleTimeMessage = (timeValue: any, message: any) => {
+
+        const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
+            index === coffeeRecipe.length - 1 ? { ...item, inputvalue: timeValue, messageShow: message } : item
+        );
+        setCoffeeRecipe(updatedRecipe);
+        handleAutoScroll(coffeeRecipe?.length * 700)
+    }
     const handleResult = () => {
         let time
         const extractedInteger = shotTime.match(/\d+/);
@@ -79,31 +89,40 @@ export default function RecipeScreen() {
         }
         if (time) {
             if (time >= 25 && time <= 30) {
-                setMessageShow("Thats perfect. you are a gun. you didnt need any help. You are in the 1% if natually gifted baristas ")
+                handleTimeMessage(time, "Thats perfect. you are a gun. you didnt need any help. You are in the 1% if natually gifted baristas ")
+                // setMessageShow()
             }
             else if (time >= 30 && time <= 35) {
-                setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch coarser for your next coffee. It will allow a bit more acidity to be extracted from the coffee and balance the bitterness you might be tasting.")
+                handleTimeMessage(time, "You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch coarser for your next coffee. It will allow a bit more acidity to be extracted from the coffee and balance the bitterness you might be tasting.")
+                // setMessageShow()
             }
             else if (time >= 20 && time <= 25) {
-                setMessageShow("You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch finer for your next coffee. That will extract a bit more sweetness from the coffee and reduce the acidity. Follow the recipe again next time.")
+                handleTimeMessage(time, "You are pretty close. I would drink this shot as it will taste great and just adjust your grinder 1 notch finer for your next coffee. That will extract a bit more sweetness from the coffee and reduce the acidity. Follow the recipe again next time.")
+                // setMessageShow()
             }
             else if (time >= 15 && time <= 20) {
-                setMessageShow("your coffee is good but follow the following recipe again and try more better")
+                handleTimeMessage(time, "your coffee is good but follow the following recipe again and try more better")
+                // setMessageShow()
             }
             else if (time >= 35 && time <= 40) {
-                setMessageShow(message)
+                handleTimeMessage(time, message)
+                // setMessageShow(message)
             }
             else if (time >= 10 && time <= 15) {
-                setMessageShow(message)
+                handleTimeMessage(time, message)
+                // setMessageShow(message)
             }
             else if (time >= 40 && time <= 45) {
-                setMessageShow(message)
+                handleTimeMessage(time, message)
+                // setMessageShow(message)
             }
             else if (time < 10) {
-                setMessageShow(message)
+                handleTimeMessage(time, message)
+                // setMessageShow(message)
             }
             else if (time > 45) {
-                setMessageShow(message)
+                handleTimeMessage(time, message)
+                // setMessageShow(message)
 
             }
 
@@ -124,7 +143,10 @@ export default function RecipeScreen() {
                 isStep2: false,
                 isStep3: false,
                 isTimer: false,
-                isVideo: false
+                isVideo: false,
+                inputvalue: "",
+                messageShow: ""
+
             }
         ]
         setCoffeeRecipe([...coffeeRecipe, ...newArray])
@@ -155,9 +177,7 @@ export default function RecipeScreen() {
             setPortaError("please Select value")
         }
     }
-    const arrayLength = () => {
 
-    }
     const handleTimerScreen = () => {
         const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
             index === coffeeRecipe.length - 1 ? { ...item, isTimer: true, } : item
@@ -165,9 +185,7 @@ export default function RecipeScreen() {
         setCoffeeRecipe(updatedRecipe);
         handleAutoScroll(coffeeRecipe?.length * 700)
     }
-    const arrayHandle = () => {
 
-    }
     const handleMachinePrepare = () => {
         const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
             index === coffeeRecipe.length - 1 ? { ...item, isMachinePrepare: true, } : item
@@ -421,7 +439,7 @@ export default function RecipeScreen() {
                                 <CustomTextInput
                                     style={[styles.input, messageError ? styles.errorBorder : null]}
                                     placeholder="Enter your time here"
-                                    value={shotTime}
+                                    value={item.inputvalue ? item.inputvalue : shotTime}
                                     keyboardType='number-pad'
                                     onChangeText={text => setShotTime(text)}
                                 />
@@ -436,11 +454,11 @@ export default function RecipeScreen() {
                                 onPress={handleResult}
                                 btnText="Continue"
                             />
-                            {messageShow &&
+                            {item.messageShow &&
                                 <RecipeChat
-                                    chatText={messageShow}
+                                    chatText={item.messageShow}
                                 />}
-                            {messageShow &&
+                            {item.messageShow &&
                                 <>
                                     <RecipeChat
                                         chatText={"Now, can you go through these steps again?"}
@@ -494,7 +512,6 @@ export default function RecipeScreen() {
             {isHelp &&
                 <TouchableOpacity style={styless.btnContainer}
                     onPress={handleVideoScreen1}
-
                 >
                     <Text style={styless.bottomText}>Help</Text>
                 </TouchableOpacity>
