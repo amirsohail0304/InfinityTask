@@ -132,7 +132,7 @@ export default function RecipeScreen() {
             setMessageError("Time field is required")
         }
 
-        handleAutoScroll(450)
+        // handleAutoScroll(450)
     };
     const handleRepeatAgain = () => {
         let newArray = [
@@ -153,7 +153,7 @@ export default function RecipeScreen() {
         setShotTime("")
         // setMessageShow("")
         setMessageError("")
-        setIsHelp(false)
+        // setIsHelp(false)
         setVisible(false)
         // setIsMachinePrepare(false)
     }
@@ -267,6 +267,7 @@ export default function RecipeScreen() {
 
         }
     };
+    console.log("item.inputvalue", coffeeRecipe)
     const renderItem = ({ item, index }: any) => (
         <>
             <View style={{ marginTop: 90 }}>
@@ -427,6 +428,7 @@ export default function RecipeScreen() {
                             </View>
                         </>
                     }
+                    {console.log("item.inputvalue", typeof item.inputvalue)}
                     {item.isTimer &&
                         <View style={styles.container}>
                             <View style={{ paddingHorizontal: 10, width: "80%", alignSelf: 'flex-end' }}>
@@ -436,7 +438,7 @@ export default function RecipeScreen() {
                                 <CustomTextInput
                                     style={[styles.input, messageError ? styles.errorBorder : null]}
                                     placeholder="Enter your time here"
-                                    value={item.inputvalue ? item.inputvalue : shotTime}
+                                    value={item?.inputvalue ? item?.inputvalue.toString() : shotTime}
                                     keyboardType='number-pad'
                                     onChangeText={text => setShotTime(text)}
                                 />
@@ -479,6 +481,7 @@ export default function RecipeScreen() {
             <View style={{ height: 50 }} />
         </>
     )
+    console.log("isHelp", isHelp)
     return (
         <Footer aspectRatio="small">
             <GoBackButton />
@@ -542,8 +545,8 @@ const styless = StyleSheet.create({
         position: "absolute",
         alignItems: 'center',
         justifyContent: 'center',
-        left: 10,
-        top: 110,
+        right: 10,
+        top: 30,
         zIndex: 2
     },
     container: {
