@@ -39,7 +39,7 @@ const ImageComponent = (props: any) => {
                             >
                                 <Text style={styles.backText}>TAKE A PHOTO</Text>
                             </TouchableOpacity>
-                            <View style={{ height: 10, width: "50%", alignItems: "center" }}>
+                            <View style={{ height: 10, width: "48%", alignItems: "center" }}>
                                 <CustomTextInput
                                     style={[styles.input, error ? styles.errorBorder : null]}
                                     placeholder="Enter Name here"
@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
         alignItems: "center"
     },
     input: {
+        width: "100%",
         height: 42,
         borderColor: colors.white,
         backgroundColor: colors.white,

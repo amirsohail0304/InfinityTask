@@ -31,8 +31,8 @@ export default function MachineScreen() {
         onClose={() => setModalVisible(false)}
         onImagePicked={(uri) => setImage(uri)}
       />
-      <GoBackButton />
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <GoBackButton />
         <View style={{ marginTop: 20 }}>
           <Text style={styles.welcome}>ENTER YOUR</Text>
           <Text style={styles.title}>MACHINE</Text>
@@ -61,7 +61,7 @@ export default function MachineScreen() {
             <AntDesign name="rightcircle" size={30} color={colors.primary} />
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </Footer>
   );
 }
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {

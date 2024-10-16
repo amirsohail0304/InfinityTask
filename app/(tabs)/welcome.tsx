@@ -3,6 +3,7 @@ import {
   View,
   Text,
   TouchableOpacity,
+  SafeAreaView,
 } from 'react-native';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
@@ -12,8 +13,8 @@ import GoBackButton from './backButton';
 export default function WelcomeScreen() {
   return (
     <Footer aspectRatio="small">
-      <GoBackButton />
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <GoBackButton />
         <View>
           <Text style={styles.welcome}>WELCOME TO</Text>
           <Text style={styles.title}>JOE</Text>
@@ -28,7 +29,7 @@ export default function WelcomeScreen() {
             <Text style={styles.backText}>GET STARTED</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </Footer>
   );
 }
@@ -37,7 +38,7 @@ const styles = StyleSheet.create({
     // gap: 60,
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {

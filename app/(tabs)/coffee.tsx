@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, SafeAreaView } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
@@ -31,8 +31,8 @@ export default function CoffeeScreen() {
         onClose={() => setModalVisible(false)}
         onImagePicked={(uri) => setImage(uri)}
       />
-      <GoBackButton />
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <GoBackButton />
         <View>
           <Text style={styles.welcome}>ENTER YOUR</Text>
           <Text style={styles.title}>COFFEE</Text>
@@ -61,7 +61,7 @@ export default function CoffeeScreen() {
             <AntDesign name="rightcircle" size={30} color={colors.primary} />
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </Footer>
   );
 }
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {
