@@ -43,7 +43,7 @@ export default function SignUpScreen() {
       lastName: lastName === '',
       email: !emailRegex.test(email),
       phoneNumber: !phoneRegex.test(phoneNumber),
-      password: password.length <= 6,
+      password: password.length > 6,
       confirmPassword: password !== confirmPassword || confirmPassword === '',
     };
     setMessageError(errors);
