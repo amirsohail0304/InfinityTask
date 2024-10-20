@@ -51,8 +51,7 @@ export default function SignUpScreen() {
   };
 
   const signUpWithEmail = async () => {
-    if (validateFields()) {
-      console.log(auth, email, password)
+    if (!validateFields()) {
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => router.replace('/(tabs)/home'))
         .catch((err) => {
