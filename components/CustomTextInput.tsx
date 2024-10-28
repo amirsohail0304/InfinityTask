@@ -14,6 +14,7 @@ const CustomTextInput: React.FC<TextInputPropsWithPlaceholderTextColor> = ({
     <TextInput
       {...rest}
       placeholderTextColor={placeholderTextColor}
+
     />
   );
 };

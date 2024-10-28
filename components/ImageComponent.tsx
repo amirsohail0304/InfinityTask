@@ -15,7 +15,7 @@ import ImagePickerModal from '@/app/(tabs)/modalComponent';
 import { Ionicons } from '@expo/vector-icons';
 
 const ImageComponent = (props: any) => {
-    const { chatText, chatType, setChangeValue, value, error, selectedValue, setSelectedValue } = props;
+    const { chatText, chatType, setChangeValue, value, error, selectedValue, setSelectedValue, isPortafilterSize } = props;
     const [coffeeInfo, setCoffeeInfo] = useState({ roaster: '', name: '', age: '' });
     const [image, setImage] = useState<string | null>(null);
     const [modalVisible, setModalVisible] = useState(false);
@@ -26,7 +26,7 @@ const ImageComponent = (props: any) => {
         { label: '54mm', value: '54mm' },
         { label: '58mm', value: '58mm' },
     ];
-
+    console.log("selectedValue", selectedValue)
     return (
         <View>
             <Image
@@ -54,13 +54,20 @@ const ImageComponent = (props: any) => {
                                     placeholder="Enter Name here"
                                     value={value}
                                     onChangeText={text => setChangeValue(text)}
+                                    editable={!isPortafilterSize}
                                 />
                             </View>
                         </View>
                     </>
                     :
                     <View style={{ width: "90%", borderRadius: 10, marginTop: -10, marginStart: 30, }}>
-                        <TouchableOpacity onPress={() => setOptionsModalVisible(true)} style={styles.pickerButton}>
+                        <TouchableOpacity onPress={() => {
+                            if (!selectedValue) {
+                                setOptionsModalVisible(true)
+
+                            }
+                        }
+                        } style={styles.pickerButton}>
                             <Text style={{ color: selectedValue ? colors.primary : '#999' }}>
                                 {selectedValue ? selectedValue : 'Select an option'}
                             </Text>

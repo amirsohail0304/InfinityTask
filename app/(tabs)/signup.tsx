@@ -16,6 +16,8 @@ import {
   Alert,
   SafeAreaView,
 } from 'react-native';
+import { Formik } from 'formik'
+import { SignUpSchema } from '@/constants/MessageError';
 
 export default function SignUpScreen() {
   const [firstName, setFirstName] = useState('');
@@ -50,16 +52,16 @@ export default function SignUpScreen() {
     return !Object.values(errors).some((error) => error);
   };
 
-  const signUpWithEmail = async () => {
-    if (!validateFields()) {
-      createUserWithEmailAndPassword(auth, email, password)
-        .then(() => router.replace('/(tabs)/home'))
-        .catch((err) => {
-          console.log(err);
-        });
-    } else {
-      Alert.alert('Invalid Data', 'Please correct the highlighted fields');
-    }
+  const signUpWithEmail = async (values: any) => {
+    createUserWithEmailAndPassword(auth, values?.email, values?.password)
+      .then((res) => {
+        console.log("ressssssssssssss", res)
+        router.replace('/(tabs)/home')
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+
   };
 
   useEffect(() => {
@@ -73,107 +75,135 @@ export default function SignUpScreen() {
   }, []);
 
   return (
-    <SafeAreaView style={styles.container}>
-      <JoeLogo />
-      <View style={styles.secondContainer}>
-        <View
-          style={{
-            flexDirection: 'row',
-            gap: 20,
-            justifyContent: 'space-between',
-          }}
-        >
-          <View style={{ flex: 1 }}>
+    <Formik
+      initialValues={{
+        fName: "",
+        lName: "",
+        email: '',
+        phoneNo: "",
+        password: '',
+        confirmPassword: "",
+        termsandconditions: false,
+      }}
+      onSubmit={(values: any, { resetForm }) => {
+        signUpWithEmail(values)
+      }}
+      validationSchema={SignUpSchema}
+
+    >
+      {({ handleChange, handleBlur, handleSubmit, values, errors, touched, setFieldValue }) => (
+        <SafeAreaView style={styles.container}>
+          <JoeLogo />
+          <View style={styles.secondContainer}>
+            <View
+              style={{
+                flexDirection: 'row',
+                gap: 20,
+                justifyContent: 'space-between',
+              }}
+            >
+              <View style={{ flex: 1 }}>
+                <CustomTextInput
+                  style={[
+                    styles.input,
+                    errors?.fName && touched?.fName ? styles.errorBorder : null,
+                  ]}
+                  placeholder="First Name"
+                  value={values.fName}
+                  onChangeText={handleChange('fName')}
+                  onBlur={handleBlur("fName")}
+                />
+              </View>
+              <View style={{ flex: 1 }}>
+                <CustomTextInput
+                  style={[
+                    styles.input,
+                    errors?.lName && touched?.lName ? styles.errorBorder : null,
+                  ]}
+                  placeholder="Last Name"
+                  value={values.lName}
+                  onChangeText={handleChange('lName')}
+                  onBlur={handleBlur("lName")}
+                />
+              </View>
+            </View>
             <CustomTextInput
               style={[
                 styles.input,
-                messageError.firstName ? styles.errorBorder : null,
+                errors?.email && touched?.email ? styles.errorBorder : null,
               ]}
-              placeholder="First Name"
-              value={firstName}
-              onChangeText={setFirstName}
+              placeholder="E-mail"
+              keyboardType="email-address"
+              autoCapitalize="none"
+              value={values.email}
+              onChangeText={handleChange('email')}
+              onBlur={handleBlur("email")}
             />
-          </View>
-          <View style={{ flex: 1 }}>
             <CustomTextInput
               style={[
                 styles.input,
-                messageError.lastName ? styles.errorBorder : null,
+                errors?.phoneNo && touched?.phoneNo ? styles.errorBorder : null,
               ]}
-              placeholder="Last Name"
-              value={lastName}
-              onChangeText={setLastName}
+              placeholder="Phone Number"
+              keyboardType="phone-pad"
+              value={values.phoneNo}
+              onChangeText={handleChange('phoneNo')}
+              onBlur={handleBlur("phoneNo")}
             />
+            <CustomTextInput
+              style={[
+                styles.input,
+                errors?.password && touched?.password ? styles.errorBorder : null,
+              ]}
+              placeholder="Password"
+              secureTextEntry
+              value={values.password}
+              onChangeText={handleChange('password')}
+              onBlur={handleBlur("password")}
+            />
+            <CustomTextInput
+              style={[
+                styles.input,
+                errors?.confirmPassword && touched?.confirmPassword ? styles.errorBorder : null,
+              ]}
+              placeholder="Confirm Password"
+              secureTextEntry
+              value={values.confirmPassword}
+              onChangeText={handleChange('confirmPassword')}
+              onBlur={handleBlur("confirmPassword")}
+            />
+            <View style={styles.rememberContainer}>
+              <TouchableOpacity
+                onPress={() => setFieldValue("termsandconditions", !values.termsandconditions)}
+                style={[styles.checkbox, errors?.termsandconditions && touched?.termsandconditions ? styles.errorBorder : null,]}
+              >
+                {values.termsandconditions && <View style={styles.checkboxChecked} />}
+              </TouchableOpacity>
+              <Text style={styles.rememberText}>
+                I agree to the{' '}
+                <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
+                  Terms and Conditions
+                </Text>
+              </Text>
+            </View>
+            <TouchableOpacity
+              onPress={() => handleSubmit()}
+              style={styles.signIn}>
+              <Text style={styles.signinText}>SIGN UP</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => {
+                router.replace('/(tabs)/');
+              }}
+              style={styles.back}
+            >
+              <Text style={styles.backText}>BACK TO SIGN IN</Text>
+            </TouchableOpacity>
           </View>
-        </View>
-        <CustomTextInput
-          style={[
-            styles.input,
-            messageError.email ? styles.errorBorder : null,
-          ]}
-          placeholder="E-mail"
-          value={email}
-          onChangeText={setEmail}
-          keyboardType="email-address"
-          autoCapitalize="none"
-        />
-        <CustomTextInput
-          style={[
-            styles.input,
-            messageError.phoneNumber ? styles.errorBorder : null,
-          ]}
-          placeholder="Phone Number"
-          value={phoneNumber}
-          onChangeText={setPhoneNumber}
-          keyboardType="phone-pad"
-        />
-        <CustomTextInput
-          style={[
-            styles.input,
-            messageError.password ? styles.errorBorder : null,
-          ]}
-          placeholder="Password"
-          value={password}
-          onChangeText={setPassword}
-          secureTextEntry
-        />
-        <CustomTextInput
-          style={[
-            styles.input,
-            messageError.confirmPassword ? styles.errorBorder : null,
-          ]}
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChangeText={setConfirmPassword}
-          secureTextEntry
-        />
-        <View style={styles.rememberContainer}>
-          <TouchableOpacity
-            onPress={() => setTermsandconditions(!termsandconditions)}
-            style={styles.checkbox}
-          >
-            {termsandconditions && <View style={styles.checkboxChecked} />}
-          </TouchableOpacity>
-          <Text style={styles.rememberText}>
-            I agree to the{' '}
-            <Text style={{ color: colors.primary, fontWeight: 'bold' }}>
-              Terms and Conditions
-            </Text>
-          </Text>
-        </View>
-        <TouchableOpacity onPress={signUpWithEmail} style={styles.signIn}>
-          <Text style={styles.signinText}>SIGN UP</Text>
-        </TouchableOpacity>
-        <TouchableOpacity
-          onPress={() => {
-            router.replace('/(tabs)/');
-          }}
-          style={styles.back}
-        >
-          <Text style={styles.backText}>BACK TO SIGN IN</Text>
-        </TouchableOpacity>
-      </View>
-    </SafeAreaView>
+        </SafeAreaView>
+
+      )}
+    </Formik>
   );
 }
 

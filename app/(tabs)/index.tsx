@@ -39,7 +39,8 @@ export default function SignInScreen() {
     const phoneRegex = /^\+?[1-9]\d{1,14}$/;
     const isEmailValid = emailRegex.test(email);
     const isPhoneNumberValid = phoneRegex.test(email);
-    const isPasswordValid = password.length <= 6;
+    const isPasswordValid = password.length >= 6;
+    console.log("password", password.length >= 6)
     if (!isEmailValid && !isPhoneNumberValid) {
       Alert.alert('Invalid email or phone number format');
     }
@@ -58,7 +59,6 @@ export default function SignInScreen() {
   };
 
   const signInWithEmail = async () => {
-    router.replace('/(tabs)/home')
     if (validateFields()) {
       signInWithEmailAndPassword(auth, email, password)
         .then(() => router.replace('/(tabs)/home'))

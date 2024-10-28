@@ -155,17 +155,21 @@ export default function RecipeScreen() {
         setMessageError("")
         // setIsHelp(false)
         setVisible(false)
+        // if(coffeeRecipe)
+        console.log("coffff", coffeeRecipe.length)
+        handleAutoScroll(coffeeRecipe?.length * 335)
         // setIsMachinePrepare(false)
     }
     const handlePortaSize = () => {
         if (nameValue?.trim()?.length > 0) {
             setIsPortafilterSize(true)
-            setNameValue("")
+            // setNameValue("")
             setMessageError("")
         }
         else {
             setMessageError("Name field is required")
         }
+        handleAutoScroll(coffeeRecipe?.length * 100)
     }
     const handlePortaValue = () => {
         if (selectedValue) {
@@ -191,9 +195,10 @@ export default function RecipeScreen() {
             index === coffeeRecipe.length - 1 ? { ...item, isMachinePrepare: true, } : item
         );
         setCoffeeRecipe(updatedRecipe);
-        handleAutoScroll(coffeeRecipe?.length > 0 ? coffeeRecipe?.length * 140 : 140)
+        handleAutoScroll(coffeeRecipe?.length > 0 ? coffeeRecipe?.length * 150 : 150)
     }
     const handleStep1 = () => {
+        console.log("steppppppp111111111111111111")
         const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
             index === coffeeRecipe.length - 1 ? { ...item, isStep1: true } : item
         );
@@ -206,7 +211,7 @@ export default function RecipeScreen() {
             index === coffeeRecipe.length - 1 ? { ...item, isStep2: true } : item
         );
         setCoffeeRecipe(updatedRecipe);
-        handleAutoScroll(coffeeRecipe?.length * 350);
+        handleAutoScroll(coffeeRecipe?.length * 400);
     };
 
     const handleStep3 = () => {
@@ -214,7 +219,7 @@ export default function RecipeScreen() {
             index === coffeeRecipe.length - 1 ? { ...item, isStep3: true } : item
         );
         setCoffeeRecipe(updatedRecipe);
-        handleAutoScroll(coffeeRecipe?.length * 400);
+        handleAutoScroll(coffeeRecipe?.length * 450);
     };
     const handleVideoScreen = () => {
         const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
@@ -223,6 +228,7 @@ export default function RecipeScreen() {
         setCoffeeRecipe(updatedRecipe);
         setVisible(true)
         setIsHelp(true)
+        handleAutoScroll(coffeeRecipe?.length * 500);
         Animated.timing(fadeAnim, {
             toValue: 1,
             duration: 500,
@@ -279,11 +285,13 @@ export default function RecipeScreen() {
                     value={nameValue}
                     error={messageError}
                     chatType="takePhoto"
+                    isPortafilterSize={isPortafilterSize}
                 />
             </View>
             <BtnComponenet
                 onPress={handlePortaSize}
                 btnText="Continue"
+                isPortafilterSize={isPortafilterSize}
             />
             {isPortafilterSize &&
                 <>
@@ -327,23 +335,6 @@ export default function RecipeScreen() {
                 >
                     {item.isMachinePrepare &&
                         <View>
-                            {/* <View style={styles.secondContainer}>
-                                <Text style={styles.title}>
-                                    Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.
-                                    {"\n"}{"\n"}
-                                    There are 3 variables you need to remember when making coffee:
-                                    {"\n"}
-                                    <Text style={styles.bold}>1. DOSE</Text> - the amount of ground coffee that goes IN to the basket ({selectedValue === "58mm" ? "21g" : "18g"} on your Machine)
-                                    {"\n"}{"\n"}
-                                    <Text style={styles.bold}>2. YIELD</Text> - the amount of espresso you want in your cup.
-                                    {"\n"}{"\n"}
-                                    <Text style={styles.bold}>3. TIME</Text> - the time it takes to achieve the desired yield. (25-30 Seconds). We adjust the grind to get the time into this window. The first 2 variables are constant. They always stay the same. Variable 3 is what we adjust.
-                                    {"\n"}{"\n"}
-                                    BORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence {selectedValue === "58mm" ? "21g to 42g" : "18g to 36g"}.
-                                    {"\n"}{"\n"}
-                                    Confused? Great, me too after that. Let's make some coffee and it will start to make sense.
-                                </Text>
-                            </View> */}
                             <RecipeChat
                                 chatText={`Recipe - I am going to give you a quick lesson of the fundamentals of dialing in coffee and then we are going to run a shot using these fundamentals.\n\nThere are 3 variables you need to remember when making coffee:\n\n1. DOSE - the amount of ground coffee that goes IN to the basket (${selectedValue === "58mm" ? "21g" : "18g"} on your Machine)\n\n2. YIELD - the amount of espresso you want in your cup.\n\n3. TIME - the time it takes to achieve the desired yield. (25-30 Seconds). We adjust the grind to get the time into this window. The first 2 variables are constant. They always stay the same. Variable 3 is what we adjust.\n\nBORING COFFEE FACT - Espresso works on a 1:2 brew ratio. This means one part ground coffee to 2 parts espresso in the cup, hence ${selectedValue === "58mm" ? "21g to 42g" : "18g to 36g"}.\n\nConfused? Great, me too after that. Let's make some coffee and it will start to make sense.`}
                             />
@@ -428,7 +419,7 @@ export default function RecipeScreen() {
                             </View>
                         </>
                     }
-                    {console.log("item.inputvalue", typeof item.inputvalue)}
+                    {console.log("item.inputvalue", item.inputvalue)}
                     {item.isTimer &&
                         <View style={styles.container}>
                             <View style={{ paddingHorizontal: 10, width: "80%", alignSelf: 'flex-end' }}>
@@ -441,6 +432,7 @@ export default function RecipeScreen() {
                                     value={item?.inputvalue ? item?.inputvalue.toString() : shotTime}
                                     keyboardType='number-pad'
                                     onChangeText={text => setShotTime(text)}
+                                    editable={!item.inputvalue}
                                 />
                             </View>
                             <BtnComponenet
