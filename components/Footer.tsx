@@ -9,7 +9,7 @@ import colors from './colors';
 
 const Footer: any = ({ aspectRatio, children }: any) => {
   return (
-    <SafeAreaView
+    <View
       style={styles.container}
     >
       <View style={styles.view1}>{children}</View>
@@ -19,7 +19,7 @@ const Footer: any = ({ aspectRatio, children }: any) => {
           aspectRatio == 'small' ? styles.samllLogoImage : styles.logoImage
         }
       />
-    </SafeAreaView>
+    </View>
   );
 };
 const styles = StyleSheet.create({

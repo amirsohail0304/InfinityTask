@@ -37,14 +37,13 @@ export default function SignUpScreen() {
   const validateFields = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     const phoneRegex = /^\+?[1-9]\d{1,14}$/;
-    const passwordRegex = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/;
 
     const errors = {
       firstName: firstName === '',
       lastName: lastName === '',
       email: !emailRegex.test(email),
       phoneNumber: !phoneRegex.test(phoneNumber),
-      password: !passwordRegex.test(password),
+      password: password.length > 6,
       confirmPassword: password !== confirmPassword || confirmPassword === '',
     };
     setMessageError(errors);
@@ -52,7 +51,7 @@ export default function SignUpScreen() {
   };
 
   const signUpWithEmail = async () => {
-    if (validateFields()) {
+    if (!validateFields()) {
       createUserWithEmailAndPassword(auth, email, password)
         .then(() => router.replace('/(tabs)/home'))
         .catch((err) => {
@@ -182,11 +181,12 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {
     gap: 20,
+    marginHorizontal: 20,
+    backgroundColor: colors.background,
   },
   input: {
     height: 50,

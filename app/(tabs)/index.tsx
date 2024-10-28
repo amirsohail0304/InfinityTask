@@ -13,6 +13,7 @@ import {
   StyleSheet,
   Dimensions,
   Alert,
+  SafeAreaView,
 } from 'react-native';
 
 export default function SignInScreen() {
@@ -70,7 +71,7 @@ export default function SignInScreen() {
 
   return (
     <Footer>
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <JoeLogo />
         <View style={styles.secondContainer}>
           <Text style={styles.subtitle}>
@@ -124,7 +125,7 @@ export default function SignInScreen() {
             </TouchableOpacity>
           </View>
         </View>
-      </View>
+      </SafeAreaView>
     </Footer>
   );
 }
@@ -134,7 +135,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 25,
     justifyContent: 'space-between',
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {

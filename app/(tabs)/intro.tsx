@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   ScrollView,
+  SafeAreaView,
 } from 'react-native';
 import AntDesign from '@expo/vector-icons/AntDesign';
 import colors from '@/components/colors';
@@ -12,13 +13,14 @@ import Footer from '@/components/Footer';
 import { router } from 'expo-router';
 import { useState } from 'react';
 import GoBackButton from './backButton';
+import BtnComponenet from '@/components/BtnComponenet';
 
 export default function IntroScreen() {
   const [text, onChangeText] = useState('');
   return (
     <Footer aspectRatio="small">
-      <GoBackButton />
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
+        <GoBackButton />
         <View>
           <Image
             source={require('@/assets/images/avatar.png')}
@@ -81,15 +83,20 @@ export default function IntroScreen() {
             </View>
           </ScrollView>
         </View>
-      </View>
+      </SafeAreaView>
       <View style={styles.bottomContainer}>
-        <TouchableOpacity
+        <BtnComponenet
+          onPress={() => router.navigate('/(tabs)/recipe')}
+          btnText="Yes"
+        />
+
+        {/* <TouchableOpacity
           style={styles.bottomContainer}
           onPress={() => router.navigate('/(tabs)/recipe')}
         >
           <Text style={styles.bottomText}>YES</Text>
           <AntDesign name="rightcircle" size={30} color={colors.primary} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </Footer>
   );
@@ -135,11 +142,6 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
   bottomContainer: {
-    gap: 10,
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    paddingHorizontal: 20,
     top: 15,
     zIndex: 2
   },

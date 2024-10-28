@@ -5,6 +5,7 @@ import {
   Text,
   TouchableOpacity,
   Linking,
+  SafeAreaView,
 } from 'react-native';
 import colors from '@/components/colors';
 import Footer from '@/components/Footer';
@@ -13,7 +14,7 @@ import { router } from 'expo-router';
 export default function HomeScreen() {
   return (
     <Footer aspectRatio="small">
-      <View style={styles.container}>
+      <SafeAreaView style={styles.container}>
         <View>
           <Text style={styles.title}>JOE</Text>
           <Image
@@ -59,7 +60,7 @@ export default function HomeScreen() {
             <Text style={styles.backText}>ABOUT</Text>
           </TouchableOpacity>
         </View>
-      </View>
+      </SafeAreaView>
     </Footer>
   );
 }
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'center',
-    paddingHorizontal: 20,
+    marginHorizontal: 20,
     backgroundColor: colors.background,
   },
   secondContainer: {

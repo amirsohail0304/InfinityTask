@@ -20,8 +20,8 @@ export default function GoBackButton() {
 const styles = StyleSheet.create({
     backIcon: {
         position: 'absolute',
-        top: 50,
-        left: 20,
+        top: 60,
+        left: 10,
         zIndex: 1,
         elevation: 5,
         shadowColor: '#000',
