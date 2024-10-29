@@ -8,6 +8,8 @@ import {
   onAuthStateChanged,
 } from 'firebase/auth';
 import React, { useEffect, useState } from 'react';
+
+import Toast from 'react-native-simple-toast';
 import {
   View,
   Text,
@@ -27,14 +29,6 @@ export default function SignUpScreen() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [termsandconditions, setTermsandconditions] = useState(false);
-  const [messageError, setMessageError] = useState({
-    firstName: false,
-    lastName: false,
-    email: false,
-    phoneNumber: false,
-    password: false,
-    confirmPassword: false,
-  });
 
   const validateFields = () => {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -48,7 +42,7 @@ export default function SignUpScreen() {
       password: password.length > 6,
       confirmPassword: password !== confirmPassword || confirmPassword === '',
     };
-    setMessageError(errors);
+    // setMessageError(errors);
     return !Object.values(errors).some((error) => error);
   };
 
@@ -56,9 +50,15 @@ export default function SignUpScreen() {
     createUserWithEmailAndPassword(auth, values?.email, values?.password)
       .then((res) => {
         console.log("ressssssssssssss", res)
+        Toast.show("You have signed up successfully!", Toast.SHORT);
         router.replace('/(tabs)/home')
       })
       .catch((err) => {
+        console.log("err.code", err.code)
+
+        if (err.code === "auth/email-already-in-use") {
+          Toast.show("The email address is already in use. Please use a different email.", Toast.SHORT);
+        }
         console.log(err);
       });
 
@@ -86,6 +86,7 @@ export default function SignUpScreen() {
         termsandconditions: false,
       }}
       onSubmit={(values: any, { resetForm }) => {
+        console.log("valuesss", values)
         signUpWithEmail(values)
       }}
       validationSchema={SignUpSchema}
@@ -200,6 +201,7 @@ export default function SignUpScreen() {
               <Text style={styles.backText}>BACK TO SIGN IN</Text>
             </TouchableOpacity>
           </View>
+
         </SafeAreaView>
 
       )}
@@ -273,5 +275,10 @@ const styles = StyleSheet.create({
     color: colors.primary,
     fontSize: 16,
     fontWeight: 'bold',
+  },
+  title: {
+    fontSize: 13,
+    textAlign: 'justify',
+    color: colors.white,
   },
 });

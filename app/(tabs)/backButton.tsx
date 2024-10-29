@@ -4,11 +4,15 @@ import { Ionicons } from '@expo/vector-icons';
 import { router } from 'expo-router';
 import colors from '@/components/colors';
 
-export default function GoBackButton() {
+export default function GoBackButton(props: any) {
+    const { onBackPress } = props
     return (
         <TouchableOpacity
             style={styles.backIcon}
             onPress={() => {
+                if (onBackPress) {
+                    onBackPress()
+                }
                 router.back();
             }}
         >

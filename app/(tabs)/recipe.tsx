@@ -19,6 +19,9 @@ import ImageComponent from '@/components/ImageComponent';
 import GoBackButton from './backButton';
 import CustomTextInput from '@/components/CustomTextInput';
 import colors from '@/components/colors';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRecipeData } from '@/redux/ReceipeReducer';
+import { setRecipeFilter } from '@/redux/ReceipeFilter';
 
 export default function RecipeScreen() {
     const [isPortafilterSize, setIsPortafilterSize] = useState<boolean>(false);
@@ -34,17 +37,22 @@ export default function RecipeScreen() {
     const [visible, setVisible] = useState(false);
     const [isHelp, setIsHelp] = useState(false);
     const fadeAnim = useRef(new Animated.Value(0)).current;
-    const [coffeeRecipe, setCoffeeRecipe] = useState<any>([{
-        id: 1,
-        isMachinePrepare: false,
-        isStep1: false,
-        isStep2: false,
-        isStep3: false,
-        isTimer: false,
-        isVideo: false,
-        inputvalue: "",
-        messageShow: ""
-    }]);
+    const dispatch = useDispatch()
+
+    const { receipeData } = useSelector((state: any) => state?.receipeData)
+    const { receipefilter } = useSelector((state: any) => state?.receipeFilter)
+    // const [coffeeRecipe, setCoffeeRecipe] = useState<any>([{
+    //     id: 1,
+    //     isMachinePrepare: false,
+    //     isStep1: false,
+    //     isStep2: false,
+    //     isStep3: false,
+    //     isTimer: false,
+    //     isVideo: false,
+    //     inputvalue: "",
+    //     messageShow: ""
+    // }]);
+    const [coffeeRecipe, setCoffeeRecipe] = useState<any>(receipeData);
     const [isMachinePrepare, setIsMachinePrepare] = useState<boolean>(false);
     const [timer, setTimer] = useState<any>("");
     const [shotTime, setShotTime] = useState('');
@@ -70,6 +78,7 @@ export default function RecipeScreen() {
     );
     const handleTimeMessage = (timeValue: any, message: any) => {
 
+
         const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
             index === coffeeRecipe.length - 1 ? { ...item, inputvalue: timeValue, messageShow: message } : item
         );
@@ -82,7 +91,6 @@ export default function RecipeScreen() {
 
         if (extractedInteger) {
             time = parseInt(extractedInteger[0], 10);
-            console.log(time);
         } else {
             setMessageError("No integer found")
             return;
@@ -156,7 +164,6 @@ export default function RecipeScreen() {
         // setIsHelp(false)
         setVisible(false)
         // if(coffeeRecipe)
-        console.log("coffff", coffeeRecipe.length)
         handleAutoScroll(coffeeRecipe?.length * 335)
         // setIsMachinePrepare(false)
     }
@@ -165,6 +172,13 @@ export default function RecipeScreen() {
             setIsPortafilterSize(true)
             // setNameValue("")
             setMessageError("")
+            dispatch(setRecipeFilter(
+                {
+                    ...receipefilter,
+                    nameValue: nameValue,
+                    isPortafilterSize: true
+                }
+            ))
         }
         else {
             setMessageError("Name field is required")
@@ -172,14 +186,27 @@ export default function RecipeScreen() {
         handleAutoScroll(coffeeRecipe?.length * 100)
     }
     const handlePortaValue = () => {
-        if (selectedValue) {
-            setIsPortaValue(true)
-            setPortaError("")
-            handleAutoScroll(200)
+        try {
+            if (selectedValue) {
+                setIsPortaValue(true)
+                setPortaError("")
+                handleAutoScroll(200)
+                dispatch(setRecipeFilter(
+                    {
+                        ...receipefilter,
+                        selectedValue: selectedValue,
+                        isPortaValue: true
+                    }
+                ))
+            }
+            else {
+                setPortaError("please Select value")
+            }
+        } catch (error) {
+            console.log("errr", error)
+
         }
-        else {
-            setPortaError("please Select value")
-        }
+
     }
 
     const handleTimerScreen = () => {
@@ -198,7 +225,6 @@ export default function RecipeScreen() {
         handleAutoScroll(coffeeRecipe?.length > 0 ? coffeeRecipe?.length * 150 : 150)
     }
     const handleStep1 = () => {
-        console.log("steppppppp111111111111111111")
         const updatedRecipe = coffeeRecipe.map((item: any, index: any) =>
             index === coffeeRecipe.length - 1 ? { ...item, isStep1: true } : item
         );
@@ -228,6 +254,12 @@ export default function RecipeScreen() {
         setCoffeeRecipe(updatedRecipe);
         setVisible(true)
         setIsHelp(true)
+        dispatch(setRecipeFilter(
+            {
+                ...receipefilter,
+                isHelp: true
+            }
+        ))
         handleAutoScroll(coffeeRecipe?.length * 500);
         Animated.timing(fadeAnim, {
             toValue: 1,
@@ -255,10 +287,8 @@ export default function RecipeScreen() {
         handleAutoScroll(300)
     }
     const handleAutoScroll = (position: any) => {
-        console.log("position", position)
         const screenHeight = Dimensions.get('window').height;
         const contentHeight = position * lineHeight;
-        console.log("contentHeight", contentHeight, contentHeight > screenHeight - lineHeight * 2)
 
         if (contentHeight > screenHeight - lineHeight * 2) {
             flatListRef.current?.scrollToOffset({
@@ -273,7 +303,6 @@ export default function RecipeScreen() {
 
         }
     };
-    console.log("item.inputvalue", coffeeRecipe)
     const renderItem = ({ item, index }: any) => (
         <>
             <View style={{ marginTop: 90 }}>
@@ -282,25 +311,25 @@ export default function RecipeScreen() {
                 />
                 <ImageComponent
                     setChangeValue={setNameValue}
-                    value={nameValue}
+                    value={receipefilter?.nameValue ? receipefilter?.nameValue : nameValue}
                     error={messageError}
                     chatType="takePhoto"
-                    isPortafilterSize={isPortafilterSize}
+                    isPortafilterSize={receipefilter?.isPortafilterSize}
                 />
             </View>
             <BtnComponenet
                 onPress={handlePortaSize}
                 btnText="Continue"
-                isPortafilterSize={isPortafilterSize}
+                isPortafilterSize={receipefilter?.isPortafilterSize}
             />
-            {isPortafilterSize &&
+            {receipefilter?.isPortafilterSize &&
                 <>
                     <RecipeChat
                         chatText={"Okay great. Firstly what size portafilter does your machine have?"}
                     />
                     <ImageComponent
                         error={portaError}
-                        selectedValue={selectedValue}
+                        selectedValue={selectedValue ? selectedValue : receipefilter?.selectedValue}
                         setSelectedValue={setSelectedValue}
                     />
 
@@ -312,7 +341,7 @@ export default function RecipeScreen() {
                 </>
             }
 
-            {isPortaValue &&
+            {receipefilter?.isPortaValue &&
                 <>
                     <RecipeChat
                         chatText={"Cool lets begin. Step 1 - Prepare your machine -turn it on an let it get to temp- run a shot (of just hot water) through the portafilter to heat it up. We want it to be consistently hot all the time"}
@@ -419,7 +448,6 @@ export default function RecipeScreen() {
                             </View>
                         </>
                     }
-                    {console.log("item.inputvalue", item.inputvalue)}
                     {item.isTimer &&
                         <View style={styles.container}>
                             <View style={{ paddingHorizontal: 10, width: "80%", alignSelf: 'flex-end' }}>
@@ -473,10 +501,14 @@ export default function RecipeScreen() {
             <View style={{ height: 50 }} />
         </>
     )
-    console.log("isHelp", isHelp)
+    const onBackPress = () => {
+        dispatch(setRecipeData(coffeeRecipe))
+    }
     return (
         <Footer aspectRatio="small">
-            <GoBackButton />
+            <GoBackButton
+                onBackPress={onBackPress}
+            />
             <FlatList
                 data={[0]}
                 ref={flatListRef}
@@ -501,7 +533,7 @@ export default function RecipeScreen() {
                     <Text style={styless.title}>"Don't quite get it? Watch this video?"</Text>
                 </Animated.View>
             }
-            {isHelp &&
+            {receipefilter?.isHelp &&
                 <TouchableOpacity style={styless.btnContainer}
                     onPress={handleVideoScreen1}
                 >
