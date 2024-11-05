@@ -20,6 +20,7 @@ import {
 } from 'react-native';
 import { Formik } from 'formik'
 import { SignUpSchema } from '@/constants/MessageError';
+import ErrorText from '@/components/ErrorComponent';
 
 export default function SignUpScreen() {
   const [firstName, setFirstName] = useState('');
@@ -49,19 +50,14 @@ export default function SignUpScreen() {
   const signUpWithEmail = async (values: any) => {
     createUserWithEmailAndPassword(auth, values?.email, values?.password)
       .then((res) => {
-        console.log("ressssssssssssss", res)
         Toast.show("You have signed up successfully!", Toast.SHORT);
         router.replace('/(tabs)/home')
       })
       .catch((err) => {
-        console.log("err.code", err.code)
-
-        if (err.code === "auth/email-already-in-use") {
+        if (err.code?.trim() == ("auth/email-already-in-use").trim()) {
           Toast.show("The email address is already in use. Please use a different email.", Toast.SHORT);
         }
-        console.log(err);
-      });
-
+      })
   };
 
   useEffect(() => {
@@ -151,28 +147,42 @@ export default function SignUpScreen() {
               onChangeText={handleChange('phoneNo')}
               onBlur={handleBlur("phoneNo")}
             />
-            <CustomTextInput
-              style={[
-                styles.input,
-                errors?.password && touched?.password ? styles.errorBorder : null,
-              ]}
-              placeholder="Password"
-              secureTextEntry
-              value={values.password}
-              onChangeText={handleChange('password')}
-              onBlur={handleBlur("password")}
-            />
-            <CustomTextInput
-              style={[
-                styles.input,
-                errors?.confirmPassword && touched?.confirmPassword ? styles.errorBorder : null,
-              ]}
-              placeholder="Confirm Password"
-              secureTextEntry
-              value={values.confirmPassword}
-              onChangeText={handleChange('confirmPassword')}
-              onBlur={handleBlur("confirmPassword")}
-            />
+            <View>
+              <CustomTextInput
+                style={[
+                  styles.input,
+                  errors?.password && touched?.password ? styles.errorBorder : null,
+                ]}
+                placeholder="Password"
+                secureTextEntry
+                value={values.password}
+                onChangeText={handleChange('password')}
+                onBlur={handleBlur("password")}
+              />
+              {errors?.password && touched?.password &&
+                <ErrorText
+                  error={errors?.password}
+                />
+              }
+            </View>
+            <View>
+              <CustomTextInput
+                style={[
+                  styles.input,
+                  errors?.confirmPassword && touched?.confirmPassword ? styles.errorBorder : null,
+                ]}
+                placeholder="Confirm Password"
+                secureTextEntry
+                value={values.confirmPassword}
+                onChangeText={handleChange('confirmPassword')}
+                onBlur={handleBlur("confirmPassword")}
+              />
+              {errors?.confirmPassword && touched?.confirmPassword &&
+                <ErrorText
+                  error={errors?.confirmPassword}
+                />
+              }
+            </View>
             <View style={styles.rememberContainer}>
               <TouchableOpacity
                 onPress={() => setFieldValue("termsandconditions", !values.termsandconditions)}

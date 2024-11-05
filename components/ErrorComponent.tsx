@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
         fontSize: 12,
         // fontFamily: FONTS.InterMedium,
         color: "red",
-        marginTop: 7,
-        marginStart: 25
+        // marginTop: 7,
+        marginStart: 10
     }
 });
 
